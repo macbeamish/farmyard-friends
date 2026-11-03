@@ -19,7 +19,7 @@ FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 SOURCES = {
     "cow": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Single_Cow_Moo.ogg",
     "pig": "https://upload.wikimedia.org/wikipedia/commons/7/73/Mudchute_pig_1.ogg",
-    "duck": "https://upload.wikimedia.org/wikipedia/commons/3/39/Pekin_duck_%26_mallard.ogg",
+    "duck": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Anas_platyrhynchos_-_Mallard_-_XC62258.ogg",
     "horse": "https://upload.wikimedia.org/wikipedia/commons/d/db/Wiehern.ogg",
     "sheep": "https://upload.wikimedia.org/wikipedia/commons/1/13/Sheep_bleating.ogg",
     "chicken": "https://upload.wikimedia.org/wikipedia/commons/4/44/Hen_announcing_shes_lain_an_egg.ogg",
@@ -31,7 +31,7 @@ SOURCES = {
 SLICES = {
     "cow": (1.15, 2.65),
     "pig": (0.0, None),
-    "duck": (79.05, 79.88),
+    "duck": (1.12, 2.02),
     "horse": (0.12, 1.65),
     "sheep": (0.45, 1.65),
     "chicken": (4.35, 5.55),

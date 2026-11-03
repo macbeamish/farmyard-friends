@@ -1,5 +1,5 @@
 import { ANIMALS } from "./animals.js"
-import { promptFor, soundLine } from "./lines.js"
+import { nameLine, promptFor } from "./lines.js"
 
 const base = import.meta.env.BASE_URL
 
@@ -56,10 +56,7 @@ export function createMemory(root) {
     const name = document.createElement("span")
     name.className = "mem-name"
     name.textContent = titleCase(entry.animal.name)
-    const sound = document.createElement("span")
-    sound.className = "mem-sound"
-    sound.textContent = entry.animal.sound
-    side.append(name, sound)
+    side.append(name)
     return side
   }
 
@@ -87,16 +84,12 @@ export function createMemory(root) {
     if (!handlers.isCurrent()) return
     entry.up = true
     entry.button.classList.add("is-up")
-    const label =
-      entry.kind === "picture"
-        ? titleCase(entry.animal.name)
-        : `${titleCase(entry.animal.name)}. ${titleCase(entry.animal.sound)}.`
-    entry.button.setAttribute("aria-label", label)
+    entry.button.setAttribute("aria-label", titleCase(entry.animal.name))
     open.push(entry)
 
     if (entry.kind === "word") {
       locked = true
-      await handlers.onLine(soundLine(entry.animal))
+      await handlers.onLine(nameLine(entry.animal))
       locked = false
       if (!handlers || !handlers.isCurrent()) return
     }

@@ -50,12 +50,7 @@ export function createGame(farm, ui) {
     ui.memory.hide()
     ui.showHud()
     ui.setRound(ROUND_TITLES[1])
-    ui.setCaption(FIXED.welcome.text)
     ui.setProgress(0, ANIMALS.length)
-    await speak(FIXED.welcome)
-    if (my !== turn) return
-    await speak(FIXED.round1)
-    if (my !== turn) return
     await beginRound(my)
   }
 
@@ -69,12 +64,6 @@ export function createGame(farm, ui) {
     index = 0
     ui.setProgress(0, queue.length)
     if (round === 4) farm.showMonsters()
-    const intro = round === 2 ? FIXED.round2 : round === 4 ? FIXED.round3 : null
-    if (intro) {
-      ui.setCaption(intro.text)
-      await speak(intro)
-      if (my !== turn) return
-    }
     await ask(my)
   }
 
@@ -82,12 +71,11 @@ export function createGame(farm, ui) {
     waiting = false
     ui.setReady(false)
     ui.setProgress(0, ANIMALS.length)
-    ui.setCaption(FIXED.memory.text)
-    current = FIXED.memory
-    await speak(FIXED.memory)
+    ui.setCaption("")
+    current = null
     if (my !== turn) return
     waiting = true
-    ui.setReady(true)
+    ui.setReady(false)
     await ui.memory.play({
       isCurrent: () => my === turn,
       onProgress(done) {

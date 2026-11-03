@@ -6,10 +6,10 @@ The farm is a flat picture. The windmill sails turn, and the animals blink and s
 
 ## How to play
 
-1. **Find the animals.** The narrator says “Find the sheep.” A correct choice is answered with “Yes. It's a sheep.”
-2. **Animal sounds.** “Which animal says moo?” A correct choice is answered with “Yes. It's a cow.”
-3. **Memory match.** Flip cards. One card shows the animal. The other shows its written name and plays its sound. Match all eight pairs.
-4. **Save the animals.** Little pillow monsters float beside the animals. They are in the way, not fighting. Find the animal the narrator names. That monster waves and floats home. When every animal is safe, the animals win.
+1. **Find the animals.** The round starts straight away: “Find the sheep.” A correct choice is answered with “Yes. It's a sheep.”
+2. **Animal sounds.** The round plays the animal's own call. For the bunny, the narrator asks “Which animal goes hop hop?” A correct choice is answered with “Yes. It's a pig.”
+3. **Memory match.** Flip cards. One card shows the animal. The other shows its written name, and the narrator says that name. Match all eight pairs.
+4. **Save the animals.** Little pillow monsters float beside the animals. They are in the way, not fighting. The round starts with “Save the sheep.” That monster waves and floats home. When every animal is safe, the animals win.
 
 There is no score to lose and no scary pictures. On the farm, a wrong tap gets “Not that one. Have another try.” You can tap an animal while the question is still playing. In the memory game, a wrong pair shakes and turns back down, with no extra spoken line.
 
@@ -31,15 +31,14 @@ Publish directory: `dist`
 
 ## Animals
 
-Cow (moo), pig (oink), duck (quack), horse (neigh), bunny (squeak), chicken (cluck), turkey (gobble), sheep (baa).
+Cow (moo), pig (oink), duck (quack), horse (neigh), bunny (hop hop), chicken (cluck), turkey (gobble), sheep (baa).
 
-The memory cards play a short real animal call, not a voice saying the word. Each clip is a trimmed excerpt:
+Round 2 plays a short real animal call. The bunny question is spoken instead. Each call is a trimmed excerpt:
 
 - Cow: “Single Cow Moo” by MichaeltheFox8621, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), Wikimedia Commons.
 - Pig: “Mudchute pig 1” by Secretlondon, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), Wikimedia Commons.
-- Duck: “Pekin duck & mallard” by WaderClub, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), Wikimedia Commons.
+- Duck: “Anas platyrhynchos - Mallard - XC62258” by Jonathon Jongsma, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), Wikimedia Commons.
 - Horse: “Wiehern” by Hü, public domain, Wikimedia Commons.
 - Sheep: “Sheep bleating” by earthcalling, public domain, Wikimedia Commons.
 - Chicken: “Hen announcing she's lain an egg” by alys, public domain, Wikimedia Commons.
 - Turkey: “Gobbler” by bod, public domain, Wikimedia Commons.
-- Bunny: “Rabbit oinks and squeaks” by kessir, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), Freesound via Wikimedia Commons.

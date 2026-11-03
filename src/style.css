@@ -229,16 +229,9 @@ button.primary:focus-visible {
 }
 
 .mem-name {
-  font-size: clamp(1.05rem, 2.4vw, 1.7rem);
+  font-size: clamp(1.35rem, 3.2vw, 2.15rem);
   font-weight: 800;
   line-height: 1.1;
-}
-
-.mem-sound {
-  margin-top: 4px;
-  font-size: clamp(0.85rem, 1.8vw, 1.15rem);
-  font-weight: 800;
-  color: #8a5a32;
 }
 
 .mem-card.is-matched .mem-up {
