@@ -10,6 +10,11 @@ export const FIXED = {
   welcome: clip("welcome", "Welcome to the farm. Listen carefully, then tap the animal."),
   round1: clip("round1", "First, let's find each animal."),
   round2: clip("round2", "Now listen. Which animal makes this sound?"),
+  memory: clip(
+    "memory",
+    "Now a memory game. Turn over two cards. Match each animal with its name.",
+  ),
+  memoryDone: clip("memory-done", "Well done. You matched every animal."),
   round3: clip(
     "round3",
     "Some little pillow monsters have come to the farm. They are soft and friendly, but they are in the way. Save each animal. The animals are going to win.",
@@ -29,15 +34,17 @@ export function animalById(id) {
   return byId[id]
 }
 
+export function soundLine(animal) {
+  const spoken = animal.sound.charAt(0).toUpperCase() + animal.sound.slice(1)
+  return clip(`sound-${animal.id}`, `${spoken}.`)
+}
+
 export function promptFor(round, animal, index, kind = "ask") {
   if (round === 1 && kind === "yes") {
-    return clip(`yes-the-${animal.id}`, `Yes. The ${animal.name}.`)
+    return clip(`yes-${animal.id}`, `Yes. It's a ${animal.name}.`)
   }
   if (round === 1) {
-    const form = index % 3
-    if (form === 0) return clip(`find-${animal.id}`, `Find the ${animal.name}.`)
-    if (form === 1) return clip(`click-${animal.id}`, `Click on the ${animal.name}.`)
-    return clip(`where-${animal.id}`, `Where is the ${animal.name}?`)
+    return clip(`find-${animal.id}`, `Find the ${animal.name}.`)
   }
   if (round === 2 && kind === "yes") {
     return clip(`yes-${animal.id}`, `Yes. It's a ${animal.name}.`)

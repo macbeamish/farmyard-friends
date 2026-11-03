@@ -25,6 +25,8 @@ LINES = {
     "welcome": "Welcome to the farm. Listen carefully, then tap the animal.",
     "round1": "First, let's find each animal.",
     "round2": "Now listen. Which animal makes this sound?",
+    "memory": "Now a memory game. Turn over two cards. Match each animal with its name.",
+    "memory-done": "Well done. You matched every animal.",
     "round3": (
         "Some little pillow monsters have come to the farm. "
         "They are soft and friendly, but they are in the way. "
@@ -41,10 +43,9 @@ LINES = {
 }
 
 for name, sound in ANIMALS:
-    LINES[f"yes-the-{name}"] = f"Yes. The {name}."
+    spoken = sound[0].upper() + sound[1:]
+    LINES[f"sound-{name}"] = f"{spoken}."
     LINES[f"find-{name}"] = f"Find the {name}."
-    LINES[f"click-{name}"] = f"Click on the {name}."
-    LINES[f"where-{name}"] = f"Where is the {name}?"
     LINES[f"says-{name}"] = f"Which animal says {sound}?"
     LINES[f"yes-{name}"] = f"Yes. It's a {name}."
     LINES[f"save-{name}"] = f"Save the {name}."

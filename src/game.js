@@ -3,9 +3,10 @@ import { stopSpeaking, speak } from "./audio.js"
 import { FIXED, promptFor } from "./lines.js"
 
 const ROUND_TITLES = {
-  1: "Round 1 of 3 · Find the animals",
-  2: "Round 2 of 3 · Animal sounds",
-  3: "Round 3 of 3 · Save the animals",
+  1: "Round 1 of 4 · Find the animals",
+  2: "Round 2 of 4 · Animal sounds",
+  3: "Round 3 of 4 · Memory match",
+  4: "Round 4 of 4 · Save the animals",
 }
 
 function shuffle(list) {
@@ -46,6 +47,7 @@ export function createGame(farm, ui) {
     round = 1
     waiting = false
     farm.resetVisuals()
+    ui.memory.hide()
     ui.showHud()
     ui.setRound(ROUND_TITLES[1])
     ui.setCaption(FIXED.welcome.text)
@@ -58,12 +60,16 @@ export function createGame(farm, ui) {
   }
 
   async function beginRound(my) {
+    ui.setRound(ROUND_TITLES[round])
+    if (round === 3) {
+      await runMemory(my)
+      return
+    }
     queue = shuffle(ANIMALS)
     index = 0
-    ui.setRound(ROUND_TITLES[round])
     ui.setProgress(0, queue.length)
-    if (round === 3) farm.showMonsters()
-    const intro = round === 2 ? FIXED.round2 : round === 3 ? FIXED.round3 : null
+    if (round === 4) farm.showMonsters()
+    const intro = round === 2 ? FIXED.round2 : round === 4 ? FIXED.round3 : null
     if (intro) {
       ui.setCaption(intro.text)
       await speak(intro)
@@ -72,20 +78,51 @@ export function createGame(farm, ui) {
     await ask(my)
   }
 
+  async function runMemory(my) {
+    waiting = false
+    ui.setReady(false)
+    ui.setProgress(0, ANIMALS.length)
+    ui.setCaption(FIXED.memory.text)
+    current = FIXED.memory
+    await speak(FIXED.memory)
+    if (my !== turn) return
+    waiting = true
+    ui.setReady(true)
+    await ui.memory.play({
+      isCurrent: () => my === turn,
+      onProgress(done) {
+        ui.setProgress(done, ANIMALS.length)
+      },
+      async onLine(line) {
+        if (my !== turn) return
+        waiting = false
+        ui.setReady(false)
+        current = line
+        ui.setCaption(line.text)
+        await speak(line)
+        if (my !== turn) return
+        waiting = true
+        ui.setReady(true)
+      },
+    })
+    if (my !== turn) return
+    ui.memory.hide()
+    await completeRound(my)
+  }
+
   async function ask(my) {
     const animal = queue[index]
     current = promptFor(round, animal, index)
     ui.setCaption(current.text)
     ui.setProgress(index, queue.length)
-    ui.setReady(false)
-    await speak(current)
-    if (my !== turn) return
     waiting = true
     ui.setReady(true)
+    await speak(current)
+    if (my !== turn || !waiting) return
   }
 
   async function onPick(id) {
-    if (!waiting) return
+    if (round === 3 || !waiting) return
     const my = turn
     const animal = queue[index]
     if (id !== animal.id) {
@@ -96,20 +133,20 @@ export function createGame(farm, ui) {
       await speak(FIXED.tryAgain)
       if (my !== turn) return
       ui.setCaption(current.text)
-      await speak(current)
-      if (my !== turn) return
       waiting = true
       ui.setReady(true)
+      await speak(current)
+      if (my !== turn || !waiting) return
       return
     }
 
     waiting = false
     ui.setReady(false)
-    const success = promptFor(round, animal, index, round === 3 ? "saved" : "yes")
+    const success = promptFor(round, animal, index, round === 4 ? "saved" : "yes")
     ui.setCaption(success.text)
     ui.setProgress(index + 1, queue.length)
     farm.celebrate(animal.id)
-    if (round === 3) {
+    if (round === 4) {
       const leaving = farm.dismissMonster(animal.id)
       await speak(success)
       await leaving
@@ -142,6 +179,14 @@ export function createGame(farm, ui) {
       await speak(FIXED.round2Done)
       if (my !== turn) return
       round = 3
+      await beginRound(my)
+      return
+    }
+    if (round === 3) {
+      ui.setCaption(FIXED.memoryDone.text)
+      await speak(FIXED.memoryDone)
+      if (my !== turn) return
+      round = 4
       await beginRound(my)
       return
     }

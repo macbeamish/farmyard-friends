@@ -1,6 +1,7 @@
 node_modules
 dist
 raw-art
+raw-sounds
 .DS_Store
 *.log
 scripts/__pycache__

@@ -1,5 +1,6 @@
 import { preloadVoices } from "./audio.js"
 import { createGame } from "./game.js"
+import { createMemory } from "./memory.js"
 import { createFarm } from "./scene.js"
 
 const stage = document.querySelector("#stage")
@@ -11,6 +12,7 @@ const roundLabel = document.querySelector("#round-label")
 const progress = document.querySelector("#progress")
 const again = document.querySelector("#again")
 const hud = document.querySelector("#hud")
+const memory = createMemory(document.querySelector("#memory"))
 
 function setCaption(text) {
   caption.textContent = text
@@ -52,6 +54,7 @@ const ui = {
     again.disabled = !ready
   },
   showEnd,
+  memory,
   onAgain(handler) {
     again.addEventListener("click", handler)
   },
