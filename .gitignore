@@ -1,0 +1,7 @@
+node_modules
+dist
+raw-art
+.DS_Store
+*.log
+scripts/__pycache__
+.venv

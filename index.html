@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="A gentle farmyard game for learning English animal words, sounds, and a soft save-the-animals story."
+    />
+    <title>Farmyard Friends</title>
+    <link rel="icon" href="/art/cow.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="stage">
+        <div id="hud">
+          <p id="round-label"></p>
+          <div class="caption-card">
+            <p id="caption" role="status" aria-live="polite"></p>
+            <div id="progress" aria-hidden="true"></div>
+          </div>
+          <button id="again" class="ghost" type="button" disabled>Hear it again</button>
+        </div>
+      </div>
+      <div id="overlay">
+        <div class="card">
+          <p class="eyebrow">English on the farm</p>
+          <h1>Farmyard Friends</h1>
+          <p id="overlay-copy">Listen, then tap the animal.</p>
+          <button id="play" class="primary" type="button" disabled>Getting the farm ready…</button>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

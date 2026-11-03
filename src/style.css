@@ -1,0 +1,220 @@
+:root {
+  --ink: #3d2914;
+  --paper: #fff8ee;
+  --red: #d4533e;
+  --red-dark: #b53d2c;
+  --sky: #8ec8ea;
+  --leaf: #6eaa55;
+  color: var(--ink);
+  font-family: Nunito, "Trebuchet MS", sans-serif;
+  font-weight: 600;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--sky);
+  overflow: hidden;
+  user-select: none;
+}
+
+button,
+#caption {
+  user-select: text;
+}
+
+#app {
+  height: 100dvh;
+}
+
+#stage {
+  position: relative;
+  height: 100%;
+  touch-action: none;
+}
+
+#stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#hud {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(720px, calc(100% - 20px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#round-label {
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 248, 238, 0.88);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.caption-card {
+  width: 100%;
+  pointer-events: auto;
+  background: var(--paper);
+  border-radius: 22px;
+  padding: 12px 16px 14px;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(61, 41, 20, 0.16);
+}
+
+#caption {
+  margin: 0;
+  min-height: 2.6em;
+  font-size: clamp(1.25rem, 3.5vw, 2.05rem);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+#progress {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #eadccb;
+}
+
+.dot.on {
+  background: var(--leaf);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button.ghost {
+  pointer-events: auto;
+  border: 0;
+  background: rgba(255, 248, 238, 0.92);
+  color: var(--ink);
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 8px 14px;
+  box-shadow: 0 6px 16px rgba(61, 41, 20, 0.12);
+}
+
+button.ghost:hover,
+button.primary:hover {
+  transform: translateY(-1px);
+}
+
+button.ghost:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+}
+
+button.ghost:focus-visible,
+button.primary:focus-visible {
+  outline: 3px solid #ffe08a;
+  outline-offset: 3px;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(90, 150, 186, 0.28);
+}
+
+#overlay[hidden] {
+  display: none;
+}
+
+.card {
+  width: min(460px, 100%);
+  background: var(--paper);
+  border-radius: 30px;
+  padding: 28px 24px 24px;
+  text-align: center;
+  box-shadow: 0 18px 50px rgba(50, 30, 10, 0.22);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8a5a32;
+}
+
+.card h1 {
+  margin: 0 0 8px;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  line-height: 1.05;
+}
+
+#overlay-copy {
+  margin: 0 0 18px;
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+button.primary {
+  border: 0;
+  background: var(--red);
+  color: white;
+  font-weight: 800;
+  font-size: 1.25rem;
+  border-radius: 999px;
+  padding: 14px 28px;
+  min-width: 180px;
+}
+
+button.primary:hover {
+  background: var(--red-dark);
+}
+
+button.primary:disabled {
+  cursor: progress;
+  background: #c9a089;
+}
+
+#hud.is-hidden {
+  visibility: hidden;
+}
+
+@media (max-height: 700px) {
+  .caption-card {
+    padding: 8px 12px 10px;
+  }
+
+  #caption {
+    min-height: 0;
+    font-size: 1.15rem;
+  }
+}
