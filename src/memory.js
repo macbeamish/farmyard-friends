@@ -1,5 +1,5 @@
 import { ANIMALS } from "./animals.js"
-import { nameLine, promptFor } from "./lines.js"
+import { GOOD_JOB, nameLine } from "./lines.js"
 
 const base = import.meta.env.BASE_URL
 
@@ -106,7 +106,7 @@ export function createMemory(root) {
       second.button.classList.add("is-matched")
       matched += 1
       handlers.onProgress(matched)
-      await handlers.onLine(promptFor(1, first.animal, 0, "yes"))
+      await handlers.onLine(GOOD_JOB)
       if (matched === ANIMALS.length) {
         const done = finish
         finish = () => {}

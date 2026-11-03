@@ -6,12 +6,14 @@ The farm is a flat picture. The windmill sails turn, and the animals blink and s
 
 ## How to play
 
-1. **Find the animals.** The round starts straight away: “Find the sheep.” A correct choice is answered with “Yes. It's a sheep.”
-2. **Animal sounds.** The round plays the animal's own call. For the bunny, the narrator asks “Which animal goes hop hop?” A correct choice is answered with “Yes. It's a pig.”
-3. **Memory match.** Flip cards. One card shows the animal. The other shows its written name, and the narrator says that name. Match all eight pairs.
-4. **Save the animals.** Little pillow monsters float beside the animals. They are in the way, not fighting. The round starts with “Save the sheep.” That monster waves and floats home. When every animal is safe, the animals win.
+Each round has a written title and a short instruction in English and Russian. The Play and Hear it again buttons are labelled in both languages. The narrator only asks the question.
 
-There is no score to lose and no scary pictures. On the farm, a wrong tap gets “Not that one. Have another try.” You can tap an animal while the question is still playing. In the memory game, a wrong pair shakes and turns back down, with no extra spoken line.
+1. **Find the Animals — Найди животных.** “Find the sheep.” A correct choice is answered with “Yes. It's a sheep.”
+2. **Animal Sounds — Звуки животных.** The round plays the animal's own call. For the bunny, the narrator asks “Which animal goes hop hop?”
+3. **Memory Game — Игра на память.** One card shows the animal. The other shows its written name, and the narrator says that name. A correct pair is answered with “Good job.”
+4. **Save the Animals — Спаси животных.** “Save the sheep.” That monster waves and floats home.
+
+There is no score to lose and no scary pictures. A wrong tap on the farm just shakes, then the question plays again. You can tap an animal while the question is still playing. In the memory game, a wrong pair shakes and turns back down.
 
 ## Run it
 

@@ -1,12 +1,32 @@
 import { ANIMALS } from "./animals.js"
 import { stopSpeaking, speak } from "./audio.js"
-import { FIXED, promptFor } from "./lines.js"
+import { GOOD_JOB, promptFor } from "./lines.js"
 
-const ROUND_TITLES = {
-  1: "Round 1 of 4 · Find the animals",
-  2: "Round 2 of 4 · Animal sounds",
-  3: "Round 3 of 4 · Memory match",
-  4: "Round 4 of 4 · Save the animals",
+const ROUNDS = {
+  1: {
+    title: "Find the Animals",
+    titleRu: "Найди животных",
+    help: "Tap the animal you hear.",
+    helpRu: "Нажми на животное, которое слышишь.",
+  },
+  2: {
+    title: "Animal Sounds",
+    titleRu: "Звуки животных",
+    help: "Tap the animal that makes the sound.",
+    helpRu: "Нажми на животное, которое издаёт этот звук.",
+  },
+  3: {
+    title: "Memory Game",
+    titleRu: "Игра на память",
+    help: "Match the animal with its name.",
+    helpRu: "Соедини животное с его названием.",
+  },
+  4: {
+    title: "Save the Animals",
+    titleRu: "Спаси животных",
+    help: "Tap the animal you hear.",
+    helpRu: "Нажми на животное, которое слышишь.",
+  },
 }
 
 function shuffle(list) {
@@ -49,13 +69,13 @@ export function createGame(farm, ui) {
     farm.resetVisuals()
     ui.memory.hide()
     ui.showHud()
-    ui.setRound(ROUND_TITLES[1])
+    ui.setRound(ROUNDS[1])
     ui.setProgress(0, ANIMALS.length)
     await beginRound(my)
   }
 
   async function beginRound(my) {
-    ui.setRound(ROUND_TITLES[round])
+    ui.setRound(ROUNDS[round])
     if (round === 3) {
       await runMemory(my)
       return
@@ -117,8 +137,7 @@ export function createGame(farm, ui) {
       waiting = false
       ui.setReady(false)
       farm.shake(id)
-      ui.setCaption(FIXED.tryAgain.text)
-      await speak(FIXED.tryAgain)
+      await wait(280)
       if (my !== turn) return
       ui.setCaption(current.text)
       waiting = true
@@ -130,7 +149,7 @@ export function createGame(farm, ui) {
 
     waiting = false
     ui.setReady(false)
-    const success = promptFor(round, animal, index, round === 4 ? "saved" : "yes")
+    const success = round === 4 ? GOOD_JOB : promptFor(round, animal, index, "yes")
     ui.setCaption(success.text)
     ui.setProgress(index + 1, queue.length)
     farm.celebrate(animal.id)
@@ -154,32 +173,12 @@ export function createGame(farm, ui) {
   }
 
   async function completeRound(my) {
-    if (round === 1) {
-      ui.setCaption(FIXED.round1Done.text)
-      await speak(FIXED.round1Done)
+    if (round < 4) {
+      round += 1
       if (my !== turn) return
-      round = 2
       await beginRound(my)
       return
     }
-    if (round === 2) {
-      ui.setCaption(FIXED.round2Done.text)
-      await speak(FIXED.round2Done)
-      if (my !== turn) return
-      round = 3
-      await beginRound(my)
-      return
-    }
-    if (round === 3) {
-      ui.setCaption(FIXED.memoryDone.text)
-      await speak(FIXED.memoryDone)
-      if (my !== turn) return
-      round = 4
-      await beginRound(my)
-      return
-    }
-    ui.setCaption(FIXED.end.text)
-    await speak(FIXED.end)
     if (my !== turn) return
     ui.showEnd()
   }

@@ -6,16 +6,7 @@ export function clip(name, text) {
   return { src: `${base}audio/${name}.mp3`, text }
 }
 
-export const FIXED = {
-  memoryDone: clip("memory-done", "Well done. You matched every animal."),
-  round1Done: clip("round1-done", "Lovely. You found every animal."),
-  round2Done: clip("round2-done", "Well done. You know all the animal sounds."),
-  end: clip(
-    "end",
-    "All the animals are safe. The little monsters waved goodbye and went home for cocoa. The animals win. Well done.",
-  ),
-  tryAgain: clip("try-again", "Not that one. Have another try."),
-}
+export const GOOD_JOB = clip("good-job", "Good job.")
 
 const byId = Object.fromEntries(ANIMALS.map((animal) => [animal.id, animal]))
 
@@ -44,12 +35,6 @@ export function promptFor(round, animal, index, kind = "ask") {
   if (round === 2) {
     const spoken = animal.sound.charAt(0).toUpperCase() + animal.sound.slice(1)
     return clip(`sound-${animal.id}`, `${spoken}.`)
-  }
-  if (kind === "saved") {
-    return clip(
-      `saved-${animal.id}`,
-      `You saved the ${animal.name}. The little monster waved goodbye.`,
-    )
   }
   return clip(`save-${animal.id}`, `Save the ${animal.name}.`)
 }

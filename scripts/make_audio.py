@@ -24,14 +24,7 @@ ANIMALS = [
 
 LINES = {
     "hop-hop": "Which animal goes hop hop?",
-    "memory-done": "Well done. You matched every animal.",
-    "round1-done": "Lovely. You found every animal.",
-    "round2-done": "Well done. You know all the animal sounds.",
-    "end": (
-        "All the animals are safe. The little monsters waved goodbye "
-        "and went home for cocoa. The animals win. Well done."
-    ),
-    "try-again": "Not that one. Have another try.",
+    "good-job": "Good job.",
 }
 
 for name in ANIMALS:
@@ -40,7 +33,6 @@ for name in ANIMALS:
     LINES[f"find-{name}"] = f"Find the {name}."
     LINES[f"yes-{name}"] = f"Yes. It's a {name}."
     LINES[f"save-{name}"] = f"Save the {name}."
-    LINES[f"saved-{name}"] = f"You saved the {name}. The little monster waved goodbye."
 
 
 async def render(name: str, text: str) -> None:

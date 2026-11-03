@@ -21,12 +21,20 @@
     <div id="app">
       <div id="stage">
         <div id="hud">
-          <p id="round-label"></p>
+          <div id="round-label">
+            <p id="round-title"></p>
+            <p id="round-title-ru" lang="ru"></p>
+          </div>
           <div class="caption-card">
+            <p id="round-help"></p>
+            <p id="round-help-ru" lang="ru"></p>
             <p id="caption" role="status" aria-live="polite"></p>
             <div id="progress" aria-hidden="true"></div>
           </div>
-          <button id="again" class="ghost" type="button" disabled>Hear it again</button>
+          <button id="again" class="ghost" type="button" disabled>
+            <span class="btn-en">Hear it again</span>
+            <span class="btn-ru" lang="ru">Ещё раз</span>
+          </button>
         </div>
         <div id="memory" hidden>
           <div id="memory-board"></div>
@@ -34,10 +42,19 @@
       </div>
       <div id="overlay">
         <div class="card">
-          <p class="eyebrow">English on the farm</p>
-          <h1>Farmyard Friends</h1>
-          <p id="overlay-copy">Listen, then tap the animal.</p>
-          <button id="play" class="primary" type="button" disabled>Getting the farm ready…</button>
+          <p class="eyebrow">
+            <span id="eyebrow-en">English on the farm</span>
+            <span id="eyebrow-ru" lang="ru">Английский на ферме</span>
+          </p>
+          <h1 id="overlay-title">Farmyard Friends</h1>
+          <p id="overlay-copy">
+            <span id="overlay-en">Listen, then tap the animal.</span>
+            <span id="overlay-ru" lang="ru">Слушай и нажимай на животное.</span>
+          </p>
+          <button id="play" class="primary" type="button" disabled>
+            <span class="btn-en">Please wait</span>
+            <span class="btn-ru" lang="ru">Подождите</span>
+          </button>
         </div>
       </div>
     </div>
