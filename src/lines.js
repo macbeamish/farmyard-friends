@@ -44,7 +44,7 @@ function yesLine(animal) {
   const spoken = title(animal.name)
   return {
     text: `Yes. It's a ${animal.name}.`,
-    parts: [clip("yes-its-a", "Yes. It's a"), { pause: BEAT }, clip(`name-${animal.id}`, `${spoken}.`)],
+    parts: [clip("yes-its-a", "Yes. It's a"), clip(`name-${animal.id}`, `${spoken}.`)],
   }
 }
 
