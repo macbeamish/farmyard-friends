@@ -2,6 +2,8 @@ let current = null
 let finishCurrent = () => {}
 let cancelPause = () => {}
 let generation = 0
+let replayToken = 0
+let active = null
 let voicesReady = null
 
 function loadVoices() {
@@ -64,6 +66,20 @@ function haltAudio() {
 
 export function stopSpeaking() {
   generation += 1
+  replayToken += 1
+  active = null
+  cancelPause()
+  cancelPause = () => {}
+  haltAudio()
+}
+
+export function hearAgain() {
+  if (!active) return
+  if (!active.running) {
+    speakLine(active.line)
+    return
+  }
+  replayToken += 1
   cancelPause()
   cancelPause = () => {}
   haltAudio()
@@ -110,13 +126,35 @@ function partsOf(line) {
 }
 
 export async function speakLine(line) {
+  stopSpeaking()
   const mine = generation
-  for (const part of partsOf(line)) {
-    if (generation !== mine) return false
-    const ok = part.pause ? await waitUnlessStopped(part.pause, mine) : await playOne(part, mine)
-    if (!ok) return false
+  const run = { line, running: true }
+  active = run
+  let pass = replayToken
+  try {
+    while (generation === mine) {
+      let restarted = false
+      for (const part of partsOf(line)) {
+        if (generation !== mine) return false
+        if (replayToken !== pass) {
+          restarted = true
+          break
+        }
+        const ok = part.pause ? await waitUnlessStopped(part.pause, mine) : await playOne(part, mine)
+        if (generation !== mine) return false
+        if (replayToken !== pass) {
+          restarted = true
+          break
+        }
+        if (!ok) return false
+      }
+      if (!restarted) return generation === mine
+      pass = replayToken
+    }
+    return false
+  } finally {
+    if (active === run) run.running = false
   }
-  return generation === mine
 }
 
 export function preloadVoices() {

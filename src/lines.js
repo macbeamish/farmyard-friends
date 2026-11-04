@@ -1,7 +1,7 @@
 import { ANIMALS } from "./animals.js"
 
 const base = import.meta.env.BASE_URL
-const BEAT = 450
+const BEAT = 1500
 
 export function clip(name, text) {
   return { src: `${base}audio/${name}.mp3`, text }
@@ -62,11 +62,11 @@ function saysLine(animal) {
 
 export function promptFor(round, animal, index, kind = "ask") {
   if (kind === "yes") return yesLine(animal)
-  if (round === 1) return whereLine(animal)
-  if (round === 2 && animal.id === "bunny") {
+  if (round === 1 && animal.id === "bunny") {
     return single("hop-hop", "Which animal goes hop hop?")
   }
-  if (round === 2) return saysLine(animal)
+  if (round === 1) return saysLine(animal)
+  if (round === 2) return whereLine(animal)
   return single(`save-${animal.id}`, `Save the ${animal.name}.`)
 }
 

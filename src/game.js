@@ -1,19 +1,19 @@
 import { ANIMALS } from "./animals.js"
-import { speakLine, stopSpeaking } from "./audio.js"
+import { hearAgain, speakLine, stopSpeaking } from "./audio.js"
 import { promptFor, roundPraise } from "./lines.js"
 
 const ROUNDS = {
   1: {
-    title: "Find the Animals",
-    titleRu: "Найди животных",
-    help: "Tap the animal you hear.",
-    helpRu: "Нажми на животное, которое слышишь.",
-  },
-  2: {
     title: "Animal Sounds",
     titleRu: "Звуки животных",
     help: "Tap the animal that makes the sound.",
     helpRu: "Нажми на животное, которое издаёт этот звук.",
+  },
+  2: {
+    title: "Find the Animals",
+    titleRu: "Найди животных",
+    help: "Tap the animal you hear.",
+    helpRu: "Нажми на животное, которое слышишь.",
   },
   3: {
     title: "Memory Game",
@@ -57,7 +57,7 @@ export function createGame(farm, ui) {
   })
 
   ui.onAgain(() => {
-    if (waiting && current) speakLine(current)
+    hearAgain()
   })
 
   async function start() {

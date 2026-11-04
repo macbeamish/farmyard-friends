@@ -1,6 +1,6 @@
 # Farmyard Friends
 
-A gentle English-learning game for young children. A narrator with a mild British accent asks the player to find animals, match their sounds, and save them from soft pillow monsters.
+A gentle English-learning game for young children. A narrator with a mild British accent asks the player to match animal sounds, find the animals, and save them from soft pillow monsters.
 
 The farm is a flat picture. The windmill sails turn, and the animals blink and sway.
 
@@ -8,8 +8,8 @@ The farm is a flat picture. The windmill sails turn, and the animals blink and s
 
 Each round has a written title and a short instruction in English and Russian. The Play and Hear it again buttons are labelled in both languages. The narrator only asks the question.
 
-1. **Find the Animals — Найди животных.** “Where is the … sheep?” A correct choice is answered with “Yes. It's a … sheep.”
-2. **Animal Sounds — Звуки животных.** “Which animal says …” and then the animal's own call. For the bunny, the narrator asks “Which animal goes hop hop?”
+1. **Animal Sounds — Звуки животных.** “Which animal says …” and then the animal's own call. For the bunny, the narrator asks “Which animal goes hop hop?”
+2. **Find the Animals — Найди животных.** “Where is the … sheep?” A correct choice is answered with “Yes. It's a … sheep.”
 3. **Memory Game — Игра на память.** One card shows the animal. The other shows its written name, and the narrator says that name. A correct pair is answered with “Good job.”
 4. **Save the Animals — Спаси животных.** “Save the sheep.” A correct choice is answered with “Well done,” “Good job,” “Yes!” or “Great.” That monster waves and floats home.
 

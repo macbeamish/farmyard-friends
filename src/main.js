@@ -69,10 +69,9 @@ const ui = {
   showHud() {
     hud.classList.remove("is-hidden")
     skip.hidden = false
+    again.disabled = false
   },
-  setReady(ready) {
-    again.disabled = !ready
-  },
+  setReady() {},
   showEnd,
   memory,
   onAgain(handler) {
