@@ -1,0 +1,9 @@
+{
+  "name": "Farmyard Friends",
+  "short_name": "Farmyard",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#8ec8ea",
+  "theme_color": "#8ec8ea",
+  "start_url": "."
+}

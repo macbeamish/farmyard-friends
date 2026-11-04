@@ -1,6 +1,6 @@
 import { ANIMALS } from "./animals.js"
 import { stopSpeaking, speak } from "./audio.js"
-import { GOOD_JOB, promptFor } from "./lines.js"
+import { WELL_DONE, promptFor } from "./lines.js"
 
 const ROUNDS = {
   1: {
@@ -149,7 +149,7 @@ export function createGame(farm, ui) {
 
     waiting = false
     ui.setReady(false)
-    const success = round === 4 ? GOOD_JOB : promptFor(round, animal, index, "yes")
+    const success = round === 4 ? WELL_DONE : promptFor(round, animal, index, "yes")
     ui.setCaption(success.text)
     ui.setProgress(index + 1, queue.length)
     farm.celebrate(animal.id)

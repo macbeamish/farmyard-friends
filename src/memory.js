@@ -87,12 +87,7 @@ export function createMemory(root) {
     entry.button.setAttribute("aria-label", titleCase(entry.animal.name))
     open.push(entry)
 
-    if (entry.kind === "word") {
-      locked = true
-      await handlers.onLine(nameLine(entry.animal))
-      locked = false
-      if (!handlers || !handlers.isCurrent()) return
-    }
+    if (entry.kind === "word") handlers.onLine(nameLine(entry.animal))
 
     if (open.length < 2) return
     const [first, second] = open
@@ -106,24 +101,28 @@ export function createMemory(root) {
       second.button.classList.add("is-matched")
       matched += 1
       handlers.onProgress(matched)
-      await handlers.onLine(GOOD_JOB)
+      const cheer = handlers.onLine(GOOD_JOB)
+      locked = false
       if (matched === ANIMALS.length) {
+        await cheer
+        if (!handlers || !handlers.isCurrent()) return
         const done = finish
         finish = () => {}
         done()
       }
-    } else {
-      first.button.classList.add("is-shake")
-      second.button.classList.add("is-shake")
-      await wait(420)
-      if (!handlers || !handlers.isCurrent()) return
-      first.up = false
-      second.up = false
-      first.button.classList.remove("is-up", "is-shake")
-      second.button.classList.remove("is-up", "is-shake")
-      first.button.setAttribute("aria-label", "Hidden card")
-      second.button.setAttribute("aria-label", "Hidden card")
+      return
     }
+
+    first.button.classList.add("is-shake")
+    second.button.classList.add("is-shake")
+    await wait(180)
+    if (!handlers || !handlers.isCurrent()) return
+    first.up = false
+    second.up = false
+    first.button.classList.remove("is-up", "is-shake")
+    second.button.classList.remove("is-up", "is-shake")
+    first.button.setAttribute("aria-label", "Hidden card")
+    second.button.setAttribute("aria-label", "Hidden card")
     locked = false
   }
 

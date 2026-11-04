@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <meta
       name="description"
       content="A gentle farmyard game for learning English animal words, sounds, and a soft save-the-animals story."
@@ -31,11 +34,11 @@
             <p id="caption" role="status" aria-live="polite"></p>
             <div id="progress" aria-hidden="true"></div>
           </div>
-          <button id="again" class="ghost" type="button" disabled>
-            <span class="btn-en">Hear it again</span>
-            <span class="btn-ru" lang="ru">Ещё раз</span>
-          </button>
         </div>
+        <button id="again" class="ghost" type="button" disabled>
+          <span class="btn-en">Hear it again</span>
+          <span class="btn-ru" lang="ru">Ещё раз</span>
+        </button>
         <div id="memory" hidden>
           <div id="memory-board"></div>
         </div>
@@ -56,6 +59,10 @@
             <span class="btn-ru" lang="ru">Подождите</span>
           </button>
         </div>
+      </div>
+      <div id="rotate">
+        <p>Turn your tablet sideways</p>
+        <p lang="ru">Поверните планшет</p>
       </div>
     </div>
     <script type="module" src="/src/main.js"></script>

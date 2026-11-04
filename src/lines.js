@@ -7,6 +7,7 @@ export function clip(name, text) {
 }
 
 export const GOOD_JOB = clip("good-job", "Good job.")
+export const WELL_DONE = clip("well-done", "Well done.")
 
 const byId = Object.fromEntries(ANIMALS.map((animal) => [animal.id, animal]))
 
@@ -24,7 +25,7 @@ export function promptFor(round, animal, index, kind = "ask") {
     return clip(`yes-${animal.id}`, `Yes. It's a ${animal.name}.`)
   }
   if (round === 1) {
-    return clip(`find-${animal.id}`, `Find the ${animal.name}.`)
+    return clip(`find-${animal.id}`, `Where is the ${animal.name}?`)
   }
   if (round === 2 && kind === "yes") {
     return clip(`yes-${animal.id}`, `Yes. It's a ${animal.name}.`)

@@ -89,7 +89,6 @@ function plane(texture, width, height) {
 }
 
 export async function createFarm(stage) {
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
@@ -158,13 +157,13 @@ export async function createFarm(stage) {
     const look = MONSTER_LOOKS[i % MONSTER_LOOKS.length]
     const monsterTex = await loadTexture(asset(`art/${look}.png`))
     const monsterBlink = await loadOptional(asset(`art/${look}-blink.png`))
-    const monsterHeight = Math.min(0.95, height * 0.5)
+    const monsterHeight = Math.min(1.35, height * 0.68)
     const monsterWidth = monsterHeight * (monsterTex.image.width / monsterTex.image.height)
     const monster = plane(monsterTex, monsterWidth, monsterHeight)
     const side = i % 2 === 0 ? -1 : 1
     const monsterHome = new THREE.Vector3(
-      spot.x + side * (width * 0.34 + 0.12),
-      spot.feet + height * 0.78,
+      spot.x + side * (width * 0.22 + 0.02),
+      spot.feet + height * 0.7,
       0.6,
     )
     monster.position.copy(monsterHome)
@@ -242,17 +241,16 @@ export async function createFarm(stage) {
   resizeObserver.observe(stage)
   resize()
 
-  let frame = 0
-  const clock = new THREE.Clock()
+  const startedAt = performance.now()
+  const now = () => (performance.now() - startedAt) / 1000
 
   function animate() {
-    frame = requestAnimationFrame(animate)
-    const t = clock.getElapsedTime()
-    if (!reduced) blades.rotation.z = t * 0.5
+    const t = now()
+    blades.rotation.z = t * 0.5
 
     for (const actor of actors) {
-      const bob = reduced ? 0 : Math.sin(t * 1.7 + actor.phase) * 0.045
-      const sway = reduced ? 0 : Math.sin(t * 1.25 + actor.phase) * 0.03
+      const bob = Math.sin(t * 1.7 + actor.phase) * 0.045
+      const sway = Math.sin(t * 1.25 + actor.phase) * 0.03
       let y = actor.homeY + bob
       let rot = sway
       if (t < actor.hopUntil) {
@@ -265,7 +263,7 @@ export async function createFarm(stage) {
       actor.mesh.position.y = y
       actor.mesh.rotation.z = rot
 
-      const blinkOn = !reduced && (t + actor.phase) % 4.8 < 0.12
+      const blinkOn = (t + actor.phase) % 4.8 < 0.12
       if (actor.blink) actor.mesh.material.map = blinkOn ? actor.blink : actor.mesh.userData.base
 
       if (!actor.monster.visible) continue
@@ -277,9 +275,11 @@ export async function createFarm(stage) {
         actor.monster.rotation.z = Math.sin(k * 10) * 0.25
         if (k >= 1) actor.monster.visible = false
       } else {
-        actor.monster.position.y = actor.monsterHome.y + (reduced ? 0 : Math.sin(t * 2 + actor.phase) * 0.08)
-        actor.monster.rotation.z = reduced ? 0 : Math.sin(t * 1.4 + actor.phase) * 0.06
-        const monsterBlink = !reduced && (t + actor.phase + 1.2) % 5.1 < 0.12
+        const loom = 1 + Math.sin(t * 2.4 + actor.phase) * 0.06
+        actor.monster.scale.set(loom, loom, 1)
+        actor.monster.position.y = actor.monsterHome.y + Math.sin(t * 2.6 + actor.phase) * 0.1
+        actor.monster.rotation.z = Math.sin(t * 1.8 + actor.phase) * 0.1
+        const monsterBlink = (t + actor.phase + 1.2) % 5.1 < 0.12
         if (actor.monsterBlink) {
           actor.monster.material.map = monsterBlink ? actor.monsterBlink : actor.monster.userData.base
         }
@@ -302,7 +302,7 @@ export async function createFarm(stage) {
     actor.mesh.userData.base = actor.mesh.material.map
     actor.monster.userData.base = actor.monster.material.map
   }
-  animate()
+  renderer.setAnimationLoop(animate)
 
   function actorById(id) {
     return actors.find((actor) => actor.id === id)
@@ -336,7 +336,7 @@ export async function createFarm(stage) {
     celebrate(id) {
       const actor = actorById(id)
       if (!actor) return
-      const t = clock.getElapsedTime()
+      const t = now()
       actor.hopUntil = t + 0.45
       heart.visible = true
       heart.material.opacity = 1
@@ -347,20 +347,20 @@ export async function createFarm(stage) {
     shake(id) {
       const actor = actorById(id)
       if (!actor) return
-      actor.shakeUntil = clock.getElapsedTime() + 0.35
+      actor.shakeUntil = now() + 0.35
     },
     dismissMonster(id) {
       const actor = actorById(id)
       if (!actor) return Promise.resolve()
-      const t = clock.getElapsedTime()
+      const t = now()
       actor.leaveUntil = t + 1.15
       actor.monster.visible = true
       return new Promise((resolve) => {
-        window.setTimeout(resolve, reduced ? 200 : 1150)
+        window.setTimeout(resolve, 1150)
       })
     },
     destroy() {
-      cancelAnimationFrame(frame)
+      renderer.setAnimationLoop(null)
       resizeObserver.disconnect()
       renderer.domElement.removeEventListener("pointerdown", onPointerDown)
       renderer.dispose()

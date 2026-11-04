@@ -99,6 +99,7 @@ createFarm(stage)
 
 playButton.addEventListener("click", () => {
   if (!game || playButton.disabled) return
+  screen.orientation?.lock?.("landscape").catch(() => {})
   overlay.hidden = true
   game.start()
 })
