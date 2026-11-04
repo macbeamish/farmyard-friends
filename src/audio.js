@@ -1,5 +1,7 @@
 let current = null
 let finishCurrent = () => {}
+let cancelPause = () => {}
+let generation = 0
 let voicesReady = null
 
 function loadVoices() {
@@ -38,7 +40,8 @@ function browserSpeak(text) {
         const voice = pickBritishVoice(voices)
         if (voice) utterance.voice = voice
         utterance.lang = "en-GB"
-        utterance.rate = 0.92
+        utterance.rate = 0.9
+        utterance.pitch = 1.08
         utterance.onend = () => resolve()
         utterance.onerror = () => resolve()
         window.speechSynthesis.cancel()
@@ -47,7 +50,7 @@ function browserSpeak(text) {
   )
 }
 
-export function stopSpeaking() {
+function haltAudio() {
   finishCurrent()
   finishCurrent = () => {}
   if (current) {
@@ -59,27 +62,61 @@ export function stopSpeaking() {
   window.speechSynthesis?.cancel?.()
 }
 
-export function speak(line) {
-  stopSpeaking()
+export function stopSpeaking() {
+  generation += 1
+  cancelPause()
+  cancelPause = () => {}
+  haltAudio()
+}
+
+function playOne(line, mine) {
+  haltAudio()
   return new Promise((resolve) => {
     let settled = false
-    const finish = () => {
+    const finish = (completed) => {
       if (settled) return
       settled = true
-      resolve()
+      resolve(completed && mine === generation)
     }
-    finishCurrent = finish
+    finishCurrent = () => finish(false)
 
     const audio = new Audio(line.src)
     current = audio
-    audio.onended = finish
+    audio.onended = () => finish(true)
     audio.onerror = () => {
-      browserSpeak(line.text).then(finish)
+      browserSpeak(line.text).then(() => finish(true))
     }
     audio.play().catch(() => {
-      browserSpeak(line.text).then(finish)
+      browserSpeak(line.text).then(() => finish(true))
     })
   })
+}
+
+function waitUnlessStopped(ms, mine) {
+  return new Promise((resolve) => {
+    const timer = window.setTimeout(() => {
+      cancelPause = () => {}
+      resolve(mine === generation)
+    }, ms)
+    cancelPause = () => {
+      window.clearTimeout(timer)
+      resolve(false)
+    }
+  })
+}
+
+function partsOf(line) {
+  return line.parts ?? [line]
+}
+
+export async function speakLine(line) {
+  const mine = generation
+  for (const part of partsOf(line)) {
+    if (generation !== mine) return false
+    const ok = part.pause ? await waitUnlessStopped(part.pause, mine) : await playOne(part, mine)
+    if (!ok) return false
+  }
+  return generation === mine
 }
 
 export function preloadVoices() {

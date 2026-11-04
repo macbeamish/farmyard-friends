@@ -1,6 +1,6 @@
 import { ANIMALS } from "./animals.js"
-import { stopSpeaking, speak } from "./audio.js"
-import { WELL_DONE, promptFor } from "./lines.js"
+import { speakLine, stopSpeaking } from "./audio.js"
+import { promptFor, roundPraise } from "./lines.js"
 
 const ROUNDS = {
   1: {
@@ -57,7 +57,7 @@ export function createGame(farm, ui) {
   })
 
   ui.onAgain(() => {
-    if (waiting && current) speak(current)
+    if (waiting && current) speakLine(current)
   })
 
   async function start() {
@@ -107,7 +107,7 @@ export function createGame(farm, ui) {
         ui.setReady(false)
         current = line
         ui.setCaption(line.text)
-        await speak(line)
+        await speakLine(line)
         if (my !== turn) return
         waiting = true
         ui.setReady(true)
@@ -125,8 +125,23 @@ export function createGame(farm, ui) {
     ui.setProgress(index, queue.length)
     waiting = true
     ui.setReady(true)
-    await speak(current)
-    if (my !== turn || !waiting) return
+    const finished = await speakLine(current)
+    if (!finished || my !== turn || !waiting) return
+  }
+
+  function skipRound() {
+    const my = turn + 1
+    turn = my
+    waiting = false
+    stopSpeaking()
+    ui.memory.hide()
+    farm.resetVisuals()
+    if (round >= 4) {
+      ui.showEnd()
+      return
+    }
+    round += 1
+    beginRound(my)
   }
 
   async function onPick(id) {
@@ -142,23 +157,23 @@ export function createGame(farm, ui) {
       ui.setCaption(current.text)
       waiting = true
       ui.setReady(true)
-      await speak(current)
-      if (my !== turn || !waiting) return
+      const replayed = await speakLine(current)
+      if (!replayed || my !== turn || !waiting) return
       return
     }
 
     waiting = false
     ui.setReady(false)
-    const success = round === 4 ? WELL_DONE : promptFor(round, animal, index, "yes")
+    const success = round === 4 ? roundPraise() : promptFor(round, animal, index, "yes")
     ui.setCaption(success.text)
     ui.setProgress(index + 1, queue.length)
     farm.celebrate(animal.id)
     if (round === 4) {
       const leaving = farm.dismissMonster(animal.id)
-      await speak(success)
+      await speakLine(success)
       await leaving
     } else {
-      await speak(success)
+      await speakLine(success)
     }
     if (my !== turn) return
 
@@ -183,5 +198,5 @@ export function createGame(farm, ui) {
     ui.showEnd()
   }
 
-  return { start }
+  return { start, skip: skipRound }
 }

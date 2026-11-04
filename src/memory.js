@@ -12,12 +12,6 @@ function shuffle(list) {
   return copy
 }
 
-function wait(ms) {
-  return new Promise((resolve) => {
-    window.setTimeout(resolve, ms)
-  })
-}
-
 function titleCase(word) {
   return word.charAt(0).toUpperCase() + word.slice(1)
 }
@@ -27,6 +21,7 @@ export function createMemory(root) {
   let finish = () => {}
   let locked = false
   let open = []
+  let held = []
   let matched = 0
   let handlers = null
 
@@ -37,6 +32,7 @@ export function createMemory(root) {
     finish = () => {}
     handlers = null
     open = []
+    held = []
     locked = false
     matched = 0
     done()
@@ -79,9 +75,21 @@ export function createMemory(root) {
     return button
   }
 
+  function putBack(cards) {
+    for (const card of cards) {
+      card.up = false
+      card.button.classList.remove("is-up", "is-shake")
+      card.button.setAttribute("aria-label", "Hidden card")
+    }
+  }
+
   async function reveal(entry) {
     if (!handlers || locked || entry.up || entry.matched) return
     if (!handlers.isCurrent()) return
+    if (held.length) {
+      putBack(held)
+      held = []
+    }
     entry.up = true
     entry.button.classList.add("is-up")
     entry.button.setAttribute("aria-label", titleCase(entry.animal.name))
@@ -115,14 +123,7 @@ export function createMemory(root) {
 
     first.button.classList.add("is-shake")
     second.button.classList.add("is-shake")
-    await wait(180)
-    if (!handlers || !handlers.isCurrent()) return
-    first.up = false
-    second.up = false
-    first.button.classList.remove("is-up", "is-shake")
-    second.button.classList.remove("is-up", "is-shake")
-    first.button.setAttribute("aria-label", "Hidden card")
-    second.button.setAttribute("aria-label", "Hidden card")
+    held = [first, second]
     locked = false
   }
 

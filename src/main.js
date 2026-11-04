@@ -18,6 +18,7 @@ const roundHelp = document.querySelector("#round-help")
 const roundHelpRu = document.querySelector("#round-help-ru")
 const progress = document.querySelector("#progress")
 const again = document.querySelector("#again")
+const skip = document.querySelector("#skip")
 const hud = document.querySelector("#hud")
 const memory = createMemory(document.querySelector("#memory"))
 
@@ -58,6 +59,7 @@ function showEnd() {
   setButton(playButton, "Play again", "Играть снова")
   playButton.disabled = false
   again.disabled = true
+  skip.hidden = true
 }
 
 const ui = {
@@ -66,6 +68,7 @@ const ui = {
   setProgress,
   showHud() {
     hud.classList.remove("is-hidden")
+    skip.hidden = false
   },
   setReady(ready) {
     again.disabled = !ready
@@ -96,6 +99,10 @@ createFarm(stage)
     playButton.disabled = false
     playButton.addEventListener("click", () => window.location.reload(), { once: true })
   })
+
+skip.addEventListener("click", () => {
+  game?.skip()
+})
 
 playButton.addEventListener("click", () => {
   if (!game || playButton.disabled) return

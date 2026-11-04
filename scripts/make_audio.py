@@ -26,13 +26,17 @@ LINES = {
     "hop-hop": "Which animal goes hop hop?",
     "good-job": "Good job.",
     "well-done": "Well done.",
+    "praise-yes": "Yes!",
+    "praise-great": "Great!",
+    "where-is-the": "Where is the",
+    "yes-its-a": "Yes. It's a",
+    "which-says": "Which animal says",
 }
 
 for name in ANIMALS:
     spoken = name[0].upper() + name[1:]
     LINES[f"name-{name}"] = f"{spoken}."
-    LINES[f"find-{name}"] = f"Where is the {name}?"
-    LINES[f"yes-{name}"] = f"Yes. It's a {name}."
+    LINES[f"ask-{name}"] = f"{spoken}?"
     LINES[f"save-{name}"] = f"Save the {name}."
 
 

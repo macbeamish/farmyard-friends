@@ -12,14 +12,14 @@ export const ANIMALS = [
 // Feet sit on the grass in a 16 by 9 world, origin at the center.
 // Back row is higher on the hill; front row is closer to the camera.
 export const LAYOUT = [
-  { id: "sheep", x: -4.95, feet: -1.22, height: 1.72 },
-  { id: "horse", x: -3.15, feet: -1.05, height: 2.15 },
-  { id: "cow", x: -0.45, feet: -0.62, height: 2.05 },
-  { id: "bunny", x: 2.35, feet: -0.95, height: 1.62 },
-  { id: "turkey", x: 3.85, feet: -2.35, height: 1.72 },
-  { id: "duck", x: -4.35, feet: -2.72, height: 1.48 },
-  { id: "chicken", x: -1.55, feet: -2.95, height: 1.52 },
-  { id: "pig", x: 1.85, feet: -2.55, height: 1.58 },
+  { id: "sheep", x: -6.05, feet: -1.05, height: 1.62 },
+  { id: "horse", x: -3.45, feet: -0.85, height: 2.05 },
+  { id: "cow", x: -0.7, feet: -0.35, height: 1.95 },
+  { id: "bunny", x: 2.35, feet: -0.7, height: 1.52 },
+  { id: "turkey", x: 3.9, feet: -0.4, height: 1.45 },
+  { id: "duck", x: -5.45, feet: -3.05, height: 1.38 },
+  { id: "chicken", x: -2.25, feet: -3.2, height: 1.42 },
+  { id: "pig", x: 1.05, feet: -2.85, height: 1.48 },
 ]
 
 export const WINDMILL = {

@@ -176,9 +176,23 @@ button.ghost {
   box-shadow: 0 6px 16px rgba(61, 41, 20, 0.12);
 }
 
+button.side {
+  right: auto;
+  left: max(8px, env(safe-area-inset-left));
+  top: max(8px, env(safe-area-inset-top));
+}
+
 button.ghost:hover,
 button.primary:hover {
   transform: translateY(-1px);
+}
+
+button.ghost.side:hover {
+  transform: none;
+}
+
+button.side[hidden] {
+  display: none;
 }
 
 button.ghost:disabled {
