@@ -179,7 +179,6 @@ export function createGame(farm, ui) {
 
     index += 1
     if (index < queue.length) {
-      await wait(220)
       if (my !== turn) return
       await ask(my)
       return

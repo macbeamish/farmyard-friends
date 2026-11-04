@@ -1,7 +1,7 @@
 import { ANIMALS } from "./animals.js"
 
 const base = import.meta.env.BASE_URL
-const BEAT = 1500
+const BEAT = 500
 
 export function clip(name, text) {
   return { src: `${base}audio/${name}.mp3`, text }
@@ -52,11 +52,7 @@ function saysLine(animal) {
   const spoken = title(animal.sound)
   return {
     text: `Which animal says ${animal.sound}?`,
-    parts: [
-      clip("which-says", "Which animal says"),
-      { pause: 280 },
-      clip(`sound-${animal.id}`, `${spoken}.`),
-    ],
+    parts: [clip("which-says", "Which animal says"), clip(`sound-${animal.id}`, `${spoken}.`)],
   }
 }
 
