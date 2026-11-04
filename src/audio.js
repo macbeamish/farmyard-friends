@@ -140,7 +140,9 @@ export async function speakLine(line) {
           restarted = true
           break
         }
-        const ok = part.pause ? await waitUnlessStopped(part.pause, mine) : await playOne(part, mine)
+        const ok = Number.isFinite(part.pause)
+          ? await waitUnlessStopped(part.pause, mine)
+          : await playOne(part, mine)
         if (generation !== mine) return false
         if (replayToken !== pass) {
           restarted = true
