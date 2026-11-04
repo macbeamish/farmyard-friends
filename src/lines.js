@@ -1,7 +1,6 @@
 import { ANIMALS } from "./animals.js"
 
 const base = import.meta.env.BASE_URL
-const BEAT = 500
 
 export function clip(name, text) {
   return { src: `${base}audio/${name}.mp3`, text }
@@ -33,27 +32,15 @@ export function nameLine(animal) {
 }
 
 function whereLine(animal) {
-  const spoken = title(animal.name)
-  return {
-    text: `Where is the ${animal.name}?`,
-    parts: [clip("where-is-the", "Where is the"), { pause: BEAT }, clip(`ask-${animal.id}`, `${spoken}?`)],
-  }
+  return single(`where-${animal.id}`, `Where is the ${animal.name}?`)
 }
 
 function yesLine(animal) {
-  const spoken = title(animal.name)
-  return {
-    text: `Yes. It's a ${animal.name}.`,
-    parts: [clip("yes-its-a", "Yes. It's a"), clip(`name-${animal.id}`, `${spoken}.`)],
-  }
+  return single(`yes-${animal.id}`, `Yes. It's a ${animal.name}.`)
 }
 
 function saysLine(animal) {
-  const spoken = title(animal.sound)
-  return {
-    text: `Which animal says ${animal.sound}?`,
-    parts: [clip("which-says", "Which animal says"), clip(`sound-${animal.id}`, `${spoken}.`)],
-  }
+  return single(`says-${animal.id}`, `Which animal says ${animal.sound}?`)
 }
 
 export function promptFor(round, animal, index, kind = "ask") {
