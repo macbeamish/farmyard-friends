@@ -162,3 +162,36 @@ export async function speakLine(line) {
 export function preloadVoices() {
   return loadVoices()
 }
+
+let chimeContext = null
+
+export function playChime() {
+  const AudioContext = window.AudioContext || window.webkitAudioContext
+  if (!AudioContext) return Promise.resolve()
+  if (!chimeContext) chimeContext = new AudioContext()
+  const ctx = chimeContext
+  const start = () => {
+    const now = ctx.currentTime
+    ;[784, 1046.5, 1318.5].forEach((freq, index) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      const when = now + index * 0.07
+      osc.type = "sine"
+      osc.frequency.value = freq
+      gain.gain.setValueAtTime(0.0001, when)
+      gain.gain.exponentialRampToValueAtTime(0.2, when + 0.02)
+      gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.55)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start(when)
+      osc.stop(when + 0.56)
+    })
+  }
+  const ready = ctx.state === "suspended" ? ctx.resume() : Promise.resolve()
+  return ready.then(() => {
+    start()
+    return new Promise((resolve) => {
+      window.setTimeout(resolve, 700)
+    })
+  })
+}

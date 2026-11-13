@@ -1,4 +1,5 @@
 import { preloadVoices } from "./audio.js"
+import { createFeed } from "./feed.js"
 import { createGame } from "./game.js"
 import { createMemory } from "./memory.js"
 import { createFarm } from "./scene.js"
@@ -12,8 +13,6 @@ const eyebrowEn = document.querySelector("#eyebrow-en")
 const eyebrowRu = document.querySelector("#eyebrow-ru")
 const overlayTitle = document.querySelector("#overlay-title")
 const caption = document.querySelector("#caption")
-const roundTitle = document.querySelector("#round-title")
-const roundTitleRu = document.querySelector("#round-title-ru")
 const roundHelp = document.querySelector("#round-help")
 const roundHelpRu = document.querySelector("#round-help-ru")
 const progress = document.querySelector("#progress")
@@ -21,6 +20,7 @@ const again = document.querySelector("#again")
 const skip = document.querySelector("#skip")
 const hud = document.querySelector("#hud")
 const memory = createMemory(document.querySelector("#memory"))
+const feed = createFeed(document.querySelector("#feed"))
 
 function setCaption(text) {
   caption.textContent = text
@@ -33,8 +33,6 @@ function setButton(button, en, ru) {
 }
 
 function setRound(round) {
-  roundTitle.textContent = round.title
-  roundTitleRu.textContent = round.titleRu
   roundHelp.textContent = round.help
   roundHelpRu.textContent = round.helpRu
 }
@@ -74,6 +72,7 @@ const ui = {
   setReady() {},
   showEnd,
   memory,
+  feed,
   onAgain(handler) {
     again.addEventListener("click", handler)
   },

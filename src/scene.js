@@ -175,8 +175,10 @@ export async function createFarm(stage) {
     actors.push({
       id: spot.id,
       mesh,
+      shadow,
       blink,
       homeY,
+      lift: 0,
       phase: i * 0.7,
       monster,
       monsterBlink,
@@ -251,7 +253,7 @@ export async function createFarm(stage) {
     for (const actor of actors) {
       const bob = Math.sin(t * 1.7 + actor.phase) * 0.045
       const sway = Math.sin(t * 1.25 + actor.phase) * 0.03
-      let y = actor.homeY + bob
+      let y = actor.homeY + actor.lift + bob
       let rot = sway
       if (t < actor.hopUntil) {
         const k = 1 - (actor.hopUntil - t) / 0.45
@@ -308,12 +310,20 @@ export async function createFarm(stage) {
     return actors.find((actor) => actor.id === id)
   }
 
+  function sizeAnimal(actor, scale) {
+    actor.mesh.scale.set(scale, scale, 1)
+    actor.shadow.scale.set(scale, scale, 1)
+    const height = actor.mesh.geometry.parameters.height
+    actor.lift = (height * (scale - 1)) / 2
+  }
+
   return {
     onPick(handler) {
       pickHandler = handler
     },
     showMonsters() {
       for (const actor of actors) {
+        sizeAnimal(actor, 1.34)
         actor.monster.visible = true
         actor.monster.material.opacity = 1
         actor.monster.position.copy(actor.monsterHome)
@@ -323,6 +333,7 @@ export async function createFarm(stage) {
     },
     resetVisuals() {
       for (const actor of actors) {
+        sizeAnimal(actor, 1)
         actor.monster.visible = false
         actor.monster.material.opacity = 1
         actor.monster.position.copy(actor.monsterHome)
@@ -332,6 +343,31 @@ export async function createFarm(stage) {
         actor.shakeUntil = 0
       }
       heart.visible = false
+    },
+    screenBox(id) {
+      const actor = actorById(id)
+      if (!actor) return null
+      const mesh = actor.mesh
+      const height = mesh.geometry.parameters.height * mesh.scale.y
+      const width = mesh.geometry.parameters.width * mesh.scale.x
+      const rect = renderer.domElement.getBoundingClientRect()
+      const toScreen = (x, y) => {
+        const point = new THREE.Vector3(x, y, mesh.position.z).project(camera)
+        return {
+          x: (point.x * 0.5 + 0.5) * rect.width + rect.left,
+          y: (-point.y * 0.5 + 0.5) * rect.height + rect.top,
+        }
+      }
+      const top = toScreen(mesh.position.x, mesh.position.y + height / 2)
+      const bottom = toScreen(mesh.position.x, mesh.position.y - height / 2)
+      const left = toScreen(mesh.position.x - width / 2, mesh.position.y)
+      const right = toScreen(mesh.position.x + width / 2, mesh.position.y)
+      return {
+        left: left.x,
+        top: top.y,
+        width: right.x - left.x,
+        height: bottom.y - top.y,
+      }
     },
     celebrate(id) {
       const actor = actorById(id)

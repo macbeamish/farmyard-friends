@@ -1,5 +1,6 @@
-import { ANIMALS } from "./animals.js"
-import { GOOD_JOB, nameLine } from "./lines.js"
+import { playChime } from "./audio.js"
+import { nameLine } from "./lines.js"
+import { burstStars } from "./stars.js"
 
 const base = import.meta.env.BASE_URL
 
@@ -10,6 +11,12 @@ function shuffle(list) {
     ;[copy[i], copy[j]] = [copy[j], copy[i]]
   }
   return copy
+}
+
+function celebratePair(first, second) {
+  burstStars(first)
+  burstStars(second)
+  return playChime()
 }
 
 function titleCase(word) {
@@ -23,6 +30,7 @@ export function createMemory(root) {
   let open = []
   let held = []
   let matched = 0
+  let pairCount = 0
   let handlers = null
 
   function hide() {
@@ -35,6 +43,8 @@ export function createMemory(root) {
     held = []
     locked = false
     matched = 0
+    pairCount = 0
+    root.classList.remove("is-fruit")
     done()
   }
 
@@ -109,9 +119,9 @@ export function createMemory(root) {
       second.button.classList.add("is-matched")
       matched += 1
       handlers.onProgress(matched)
-      const cheer = handlers.onLine(GOOD_JOB)
+      const cheer = celebratePair(first.button, second.button)
       locked = false
-      if (matched === ANIMALS.length) {
+      if (matched === pairCount) {
         await cheer
         if (!handlers || !handlers.isCurrent()) return
         const done = finish
@@ -127,10 +137,12 @@ export function createMemory(root) {
     locked = false
   }
 
-  function play(nextHandlers) {
+  function play(items, nextHandlers) {
     hide()
     handlers = nextHandlers
-    const cards = ANIMALS.flatMap((animal) => [
+    pairCount = items.length
+    root.classList.toggle("is-fruit", items.length > 8)
+    const cards = items.flatMap((animal) => [
       { animal, kind: "picture", up: false, matched: false },
       { animal, kind: "word", up: false, matched: false },
     ])

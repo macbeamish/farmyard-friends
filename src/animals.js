@@ -3,7 +3,7 @@ export const ANIMALS = [
   { id: "pig", name: "pig", sound: "oink" },
   { id: "duck", name: "duck", sound: "quack" },
   { id: "horse", name: "horse", sound: "neigh" },
-  { id: "bunny", name: "bunny", sound: "squeak" },
+  { id: "bunny", name: "rabbit", sound: "squeak" },
   { id: "chicken", name: "chicken", sound: "cluck" },
   { id: "turkey", name: "turkey", sound: "gobble" },
   { id: "sheep", name: "sheep", sound: "baa" },
@@ -21,6 +21,16 @@ export const LAYOUT = [
   { id: "chicken", x: -2.25, feet: -3.2, height: 1.42 },
   { id: "pig", x: 1.05, feet: -2.85, height: 1.48 },
 ]
+
+export const EXTRA_ANIMALS = [
+  { id: "mouse", name: "mouse" },
+  { id: "goat", name: "goat" },
+  { id: "rooster", name: "rooster" },
+  { id: "goose", name: "goose" },
+]
+
+export const FEED_ANIMALS = [...ANIMALS, ...EXTRA_ANIMALS]
+export const MEMORY_ANIMALS = [...ANIMALS, ...EXTRA_ANIMALS]
 
 export const WINDMILL = {
   x: -5.85,

@@ -1,17 +1,19 @@
 # Farmyard Friends
 
-A gentle English-learning game for young children. A narrator with a mild British accent asks the player to match animal sounds, find the animals, and save them from soft pillow monsters.
+A gentle English-learning game for young children. A narrator with a mild British accent asks the player to remember fruit, feed the animals, match animal sounds, find the animals, and save them from soft pillow monsters.
 
 The farm is a flat picture. The windmill sails turn, and the animals blink and sway.
 
 ## How to play
 
-Each round has a written title and a short instruction in English and Russian. The Play and Hear it again buttons are labelled in both languages. The narrator only asks the question.
+Each round shows one instruction in English and Russian, and the narrator asks the question. The Play and Hear it again buttons are labelled in both languages.
 
-1. **Animal Sounds — Звуки животных.** “Which animal says” and then the animal's own call, straight away. For the bunny, the narrator asks “Which animal goes hop hop?”
-2. **Find the Animals — Найди животных.** “Where is the … sheep?” A correct choice is answered with “Yes. It's a sheep.”
-3. **Memory Game — Игра на память.** One card shows the animal. The other shows its written name, and the narrator says that name. A correct pair is answered with “Good job.”
-4. **Save the Animals — Спаси животных.** “Save the sheep.” A correct choice is answered with “Well done,” “Good job,” “Yes!” or “Great.” That monster waves and floats home.
+1. **Fruit Memory — Мемо: фрукты.** One card shows the fruit. The other shows its written name, and the narrator says that name. A correct pair plays a chime, and stars appear over the two cards.
+2. **Feed the Animals — Покорми животных.** “The goat is eating cherries.” The fruit sits in three baskets. Drag the right fruit onto the animal. Every animal is fed, every fruit is used, and the pairs change each game. A fed animal stays happy, with hearts and stars. The bunny is called a rabbit.
+3. **Animal Sounds — Звуки животных.** “Which animal says” and then the animal's own call, straight away. For the rabbit, the narrator asks “Which animal goes hop hop?”
+4. **Find the Animals — Найди животных.** “Where is the … sheep?” A correct choice is answered with “Yes. It's a sheep.”
+5. **Memory Game — Игра на память.** One card shows the animal. The other shows its written name, and the narrator says that name. Mouse, goat, rooster, and goose are included. A correct pair plays a chime, and stars appear over the two cards.
+6. **Save the Animals — Спаси животных.** “Save the sheep.” The animals are larger. A correct choice plays a chime, and stars appear over that animal. That monster waves and floats home.
 
 A **Next round** button on the left skips ahead. If it is left alone, the rounds continue as usual. The game is laid out for a tablet held sideways.
 
@@ -35,9 +37,11 @@ Publish directory: `dist`
 
 ## Animals
 
-Cow (moo), pig (oink), duck (quack), horse (neigh), bunny (hop hop), chicken (cluck), turkey (gobble), sheep (baa).
+Cow (moo), pig (oink), duck (quack), horse (neigh), rabbit (hop hop), chicken (cluck), turkey (gobble), sheep (baa). The feeding round also has a mouse, a goat, a rooster, and a goose.
 
-Round 2 plays a short real animal call. The bunny question is spoken instead. Each call is a trimmed excerpt:
+Fruits: apple, banana, orange, grapes, strawberry, pear, kiwi, watermelon, pineapple, lemon, mango, cherries.
+
+The animal sounds round plays a short real animal call. The rabbit question is spoken instead. Each call is a trimmed excerpt:
 
 - Cow: “Single Cow Moo” by MichaeltheFox8621, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), Wikimedia Commons.
 - Pig: “Mudchute pig 1” by Secretlondon, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), Wikimedia Commons.
