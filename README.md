@@ -9,9 +9,9 @@ The farm is a flat picture. The windmill sails turn, and the animals blink and s
 Each round shows one instruction in English and Russian, and the narrator asks the question. The Play and Hear it again buttons are labelled in both languages.
 
 1. **Fruit Memory — Мемо: фрукты.** One card shows the fruit. The other shows its written name, and the narrator says that name. A correct pair plays a chime, and stars appear over the two cards.
-2. **Feed the Animals — Покорми животных.** “The goat is eating cherries.” The fruit sits in three baskets. Drag the right fruit onto the animal. Every animal is fed, every fruit is used, and the pairs change each game. A fed animal stays happy, with hearts and stars. The bunny is called a rabbit.
+2. **Feed the Animals — Покорми животных.** “The goat is eating cherries.” The fruit sits in one wide basket. Drag the right fruit onto the animal. Every animal is fed, every fruit is used, and the pairs change each game. A fed animal stays happy, with hearts and stars. The bunny is called a rabbit.
 3. **Animal Sounds — Звуки животных.** “Which animal says” and then the animal's own call, straight away. For the rabbit, the narrator asks “Which animal goes hop hop?”
-4. **Find the Animals — Найди животных.** “Where is the … sheep?” Mouse, goat, rooster, and goose are on the farm too. A correct choice is answered with “Yes. It's a sheep.”
+4. **Find the Animals — Найди животных.** “Where is the … sheep?” Mouse, goat, rooster, and goose are on the farm too. A correct choice plays a chime, and stars appear over that animal.
 5. **Memory Game — Игра на память.** One card shows the animal. The other shows its written name, and the narrator says that name. Mouse, goat, rooster, and goose are included. A correct pair plays a chime, and stars appear over the two cards.
 6. **Save the Animals — Спаси животных.** “Save the sheep.” The animals are larger. A correct choice plays a chime, and stars appear over that animal. That monster waves and floats home.
 

@@ -569,36 +569,35 @@ button.primary:focus-visible {
   touch-action: none;
 }
 
-.feed-fruit:nth-child(1) {
-  left: -4%;
-  bottom: -34%;
-  z-index: 1;
+.basket.is-wide {
+  flex: 1 1 auto;
+  width: min(100%, 1080px);
+  max-width: 100%;
 }
 
-.feed-fruit:nth-child(2) {
-  left: 20%;
-  bottom: -46%;
-  z-index: 4;
+.basket.is-wide .basket-body {
+  left: 5%;
+  right: 5%;
 }
 
-.feed-fruit:nth-child(3) {
-  left: 38%;
-  bottom: -38%;
-  z-index: 2;
+.basket.is-wide .feed-fruit {
+  width: 11.5%;
+  height: 158%;
+  left: calc(var(--slot) * 7.55%);
+  bottom: calc(-50% + var(--lift) * 16%);
+  z-index: calc(var(--lift) * 4 + 1);
 }
 
-.feed-fruit:nth-child(4) {
-  left: 58%;
-  bottom: -50%;
+.basket.is-wide .feed-fruit[data-fruit="cherries"]:not(.is-dragging) {
   z-index: 5;
-}
-
-.feed-fruit[data-fruit="cherries"] {
+  width: 12%;
+  height: 96%;
   bottom: -36%;
+  transform: none;
 }
 
 .feed-fruit.is-next {
-  z-index: 8;
+  z-index: 20;
 }
 
 .feed-fruit.is-dragging {
@@ -720,6 +719,27 @@ html.is-filled #app {
   overflow: hidden;
 }
 
+html.is-filled {
+  background: var(--sky);
+}
+
+html.is-filled #round-help,
+html.is-filled #round-help-ru {
+  display: none;
+}
+
+html.is-filled .caption-card {
+  padding: 2px 8px 3px;
+}
+
+html.is-filled #caption {
+  font-size: 0.84rem;
+}
+
+html.is-filled #topbar {
+  gap: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mem-inner {
     transition: none;
@@ -748,7 +768,70 @@ html.is-filled #app {
   display: none;
 }
 
+@media (max-width: 900px) {
+  #feed {
+    padding-bottom: 72px;
+  }
+}
+
 @media (orientation: portrait) {
+  #topbar {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+  }
+
+  #hud {
+    flex: 1 1 100%;
+    order: -1;
+  }
+
+  #skip,
+  #full,
+  #again {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  button.ghost {
+    width: 100%;
+    padding: 3px 4px;
+    font-size: 0.64rem;
+    line-height: 1.05;
+  }
+
+  .caption-card {
+    padding: 3px 8px 4px;
+    border-radius: 12px;
+  }
+
+  #round-help,
+  #round-help-ru {
+    display: inline;
+    font-size: 0.58rem;
+    line-height: 1.1;
+  }
+
+  #round-help-ru::before {
+    content: " · ";
+  }
+
+  #caption {
+    min-height: 0;
+    font-size: 0.84rem;
+    line-height: 1.15;
+  }
+
+  #progress {
+    margin-top: 2px;
+    gap: 4px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+  }
+
   #feed-animals {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
@@ -810,11 +893,15 @@ html.is-filled #app {
 
   #round-help,
   #round-help-ru {
-    font-size: 0.6rem;
+    font-size: 0.52rem;
   }
 
   #caption {
-    font-size: 0.92rem;
+    font-size: 0.78rem;
+  }
+
+  #feed {
+    padding-bottom: 48px;
   }
 
   #progress {

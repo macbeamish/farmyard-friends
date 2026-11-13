@@ -101,7 +101,61 @@ window.addEventListener("resize", fitViewport)
 document.addEventListener("pointerdown", () => unlockAudio(), { capture: true })
 
 function fullscreenActive() {
-  return Boolean(document.fullscreenElement || document.webkitFullscreenElement)
+  return Boolean(
+    document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement,
+  )
+}
+
+function canRequestFull(el) {
+  return Boolean(el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen)
+}
+
+function requestFull(el) {
+  if (typeof el.requestFullscreen === "function") {
+    try {
+      return Promise.resolve(el.requestFullscreen({ navigationUI: "hide" }))
+    } catch {
+      return Promise.resolve(el.requestFullscreen())
+    }
+  }
+  const legacy = el.webkitRequestFullscreen || el.mozRequestFullScreen
+  if (typeof legacy !== "function") return Promise.reject(new Error("unavailable"))
+  try {
+    const result = legacy.call(el)
+    return result && typeof result.then === "function" ? result : Promise.resolve()
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
+function within(promise, ms) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error("timeout")), ms)
+    }),
+  ])
+}
+
+function tuckBrowserBars() {
+  const html = document.documentElement
+  const body = document.body
+  const htmlOverflow = html.style.overflow
+  const bodyOverflow = body.style.overflow
+  html.style.overflow = "auto"
+  body.style.overflow = "auto"
+  const tall = Math.max(window.screen?.height || 0, window.innerHeight + 160)
+  body.style.minHeight = `${tall}px`
+  window.scrollTo(0, tall)
+  window.setTimeout(() => {
+    fitViewport()
+    body.style.minHeight = ""
+    html.style.overflow = htmlOverflow
+    body.style.overflow = bodyOverflow
+    window.scrollTo(0, 0)
+  }, 350)
 }
 
 function labelFull(on) {
@@ -117,32 +171,51 @@ function labelFull(on) {
 
 async function toggleFull() {
   const root = document.documentElement
-  try {
-    if (fullscreenActive()) {
-      const exit = document.exitFullscreen || document.webkitExitFullscreen
-      if (exit) await exit.call(document)
-      root.classList.remove("is-filled")
-      return
+  if (fullscreenActive() || root.classList.contains("is-filled")) {
+    const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen
+    if (fullscreenActive() && exit) {
+      try {
+        await exit.call(document)
+      } catch {
+        /* the browser may already have left full screen */
+      }
     }
-    const request = root.requestFullscreen || root.webkitRequestFullscreen
-    if (request) {
-      await request.call(root)
-      root.classList.remove("is-filled")
-      return
-    }
-  } catch {
-    /* an in-app browser often has no full screen mode */
+    root.classList.remove("is-filled")
+    labelFull(fullscreenActive())
+    fitViewport()
+    return
   }
-  root.classList.toggle("is-filled")
-  labelFull(root.classList.contains("is-filled") || fullscreenActive())
+  if (document.fullscreenEnabled !== false && canRequestFull(root)) {
+    try {
+      await within(requestFull(root), 700)
+    } catch {
+      /* iPhone and in-app browsers refuse the Fullscreen API */
+    }
+    if (fullscreenActive()) {
+      root.classList.remove("is-filled")
+      labelFull(true)
+      fitViewport()
+      return
+    }
+  }
+  root.classList.add("is-filled")
+  labelFull(true)
+  tuckBrowserBars()
+  fitViewport()
 }
 
 full.setAttribute("aria-label", "Full screen. На весь экран")
 fullStart.setAttribute("aria-label", "Full screen. На весь экран")
 full.addEventListener("click", toggleFull)
 fullStart.addEventListener("click", toggleFull)
-document.addEventListener("fullscreenchange", () => labelFull(fullscreenActive()))
-document.addEventListener("webkitfullscreenchange", () => labelFull(fullscreenActive()))
+function onFullscreenChange() {
+  if (fullscreenActive()) document.documentElement.classList.remove("is-filled")
+  labelFull(fullscreenActive() || document.documentElement.classList.contains("is-filled"))
+  fitViewport()
+}
+
+document.addEventListener("fullscreenchange", onFullscreenChange)
+document.addEventListener("webkitfullscreenchange", onFullscreenChange)
 
 let game = null
 
@@ -154,7 +227,7 @@ createFarm(stage)
     setButton(playButton, "Play", "Играть")
     for (const animal of FEED_ANIMALS) {
       for (const fruit of FRUITS) warmClip(`${base}audio/eat-${animal.id}-${fruit.id}.mp3`)
-      warmClip(`${base}audio/where-${animal.id}.mp3`)
+      warmClip(clip(`where-${animal.id}`, "").src)
       warmClip(`${base}audio/yes-${animal.id}.mp3`)
       warmClip(`${base}audio/save-${animal.id}.mp3`)
       if (animal.id !== "bunny") warmClip(clip(`says-${animal.id}`, "").src)

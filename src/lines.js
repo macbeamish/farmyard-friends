@@ -5,7 +5,7 @@ const base = import.meta.env.BASE_URL
 const REAL_CALLS = new Set(["says-mouse", "says-goat", "says-rooster", "says-goose"])
 
 export function clip(name, text) {
-  const version = REAL_CALLS.has(name) ? "?v=2" : ""
+  const version = name.startsWith("where-") ? "?v=3" : REAL_CALLS.has(name) ? "?v=2" : ""
   return { src: `${base}audio/${name}.mp3${version}`, text }
 }
 

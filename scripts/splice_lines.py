@@ -13,7 +13,20 @@ RAW = ROOT / "raw-sounds"
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 RATE = 22050
 PAUSE = 0.5
-ANIMALS = ["cow", "pig", "duck", "horse", "bunny", "chicken", "turkey", "sheep"]
+ANIMALS = [
+    "cow",
+    "pig",
+    "duck",
+    "horse",
+    "bunny",
+    "chicken",
+    "turkey",
+    "sheep",
+    "mouse",
+    "goat",
+    "rooster",
+    "goose",
+]
 
 
 def decode(name):
@@ -81,7 +94,7 @@ def main():
     yes = decode("yes-its-a")
     which = decode("which-says")
     for animal in ANIMALS:
-        write_mp3(f"where-{animal}", join(where, decode(f"ask-{animal}"), PAUSE))
+        write_mp3(f"where-{animal}", join(where, decode(f"name-{animal}"), PAUSE))
         write_mp3(f"yes-{animal}", join(yes, decode(f"name-{animal}"), 0))
         if animal != "bunny":
             write_mp3(f"says-{animal}", join(which, decode(f"sound-{animal}"), 0))

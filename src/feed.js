@@ -147,13 +147,15 @@ export function createFeed(root) {
     piece.addEventListener("pointercancel", up)
   }
 
-  function render() {
+  function render(fruitIds = FRUITS.map((fruit) => fruit.id), fedIds = []) {
+    const list = fruitIds.map((id) => FRUITS.find((fruit) => fruit.id === id)).filter(Boolean)
     animals.replaceChildren()
     fruits.replaceChildren()
     for (const animal of FEED_ANIMALS) {
       const card = document.createElement("div")
       card.className = "feed-animal"
       card.dataset.animal = animal.id
+      if (fedIds.includes(animal.id)) card.classList.add("is-fed")
       const image = document.createElement("img")
       image.src = `${base}art/${animal.id}.png`
       image.alt = ""
@@ -163,32 +165,37 @@ export function createFeed(root) {
       card.append(image, name)
       animals.append(card)
     }
-    for (let start = 0; start < FRUITS.length; start += 4) {
-      const basket = document.createElement("div")
-      basket.className = "basket"
-      const body = document.createElement("div")
-      body.className = "basket-body"
-      for (const fruit of FRUITS.slice(start, start + 4)) {
-        const card = document.createElement("button")
-        card.type = "button"
-        card.className = "feed-fruit"
-        card.dataset.fruit = fruit.id
-        card.setAttribute("aria-label", fruit.name)
-        const image = document.createElement("img")
-        image.src = `${base}art/${fruit.id}.png`
-        image.alt = ""
-        image.draggable = false
-        card.append(image)
-        card.addEventListener("pointerdown", (event) => onDown(event, card))
-        body.append(card)
-      }
-      const art = document.createElement("img")
-      art.className = "basket-art"
-      art.src = `${base}art/basket.png?v=3`
-      art.alt = ""
-      art.draggable = false
-      basket.append(body, art)
-      fruits.append(basket)
+    const basket = document.createElement("div")
+    basket.className = "basket is-wide"
+    const body = document.createElement("div")
+    body.className = "basket-body"
+    list.forEach((fruit, slot) => {
+      const card = document.createElement("button")
+      card.type = "button"
+      card.className = "feed-fruit"
+      card.dataset.fruit = fruit.id
+      card.style.setProperty("--slot", String(slot))
+      card.style.setProperty("--lift", slot % 2 ? "1" : "0")
+      card.setAttribute("aria-label", fruit.name)
+      const image = document.createElement("img")
+      image.src = `${base}art/${fruit.id}.png`
+      image.alt = ""
+      image.draggable = false
+      card.append(image)
+      card.addEventListener("pointerdown", (event) => onDown(event, card))
+      body.append(card)
+    })
+    const art = document.createElement("img")
+    art.className = "basket-art"
+    art.src = `${base}art/basket.png?v=3`
+    art.alt = ""
+    art.draggable = false
+    basket.append(body, art)
+    fruits.append(basket)
+    const turn = queue[index]
+    if (!turn) return
+    for (const piece of fruits.querySelectorAll(".feed-fruit")) {
+      piece.classList.toggle("is-next", piece.dataset.fruit === turn.fruit.id)
     }
   }
 

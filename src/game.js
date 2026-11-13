@@ -210,12 +210,12 @@ export function createGame(farm, ui) {
     ui.setReady(false)
     ui.setProgress(index + 1, queue.length)
     farm.celebrate(animal.id)
-    if (round === LAST_ROUND) {
+    if (round === 4 || round === LAST_ROUND) {
       const box = farm.screenBox(animal.id)
       if (box) burstStarsAt(box)
-      const leaving = farm.dismissMonster(animal.id)
+      const leaving = round === LAST_ROUND ? farm.dismissMonster(animal.id) : null
       await playChime()
-      await leaving
+      if (leaving) await leaving
     } else {
       const success = promptFor(round, animal, index, "yes")
       ui.setCaption(success.text)
