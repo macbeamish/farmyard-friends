@@ -53,6 +53,10 @@ button,
   height: 100%;
 }
 
+body:has(#overlay:not([hidden])) #full {
+  display: none;
+}
+
 #topbar {
   position: relative;
   z-index: 4;
@@ -548,20 +552,22 @@ button.primary:focus-visible {
 
 #feed-fruits {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   height: auto;
   min-height: 0;
   align-items: flex-end;
   justify-content: center;
-  padding: 0 4px 8px;
+  padding: 0 168px 52px 12px;
   overflow: visible;
 }
 
 .basket {
   position: relative;
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
-  height: 100%;
+  max-width: 320px;
+  aspect-ratio: 600 / 294;
+  height: auto;
   overflow: visible;
 }
 
@@ -580,17 +586,17 @@ button.primary:focus-visible {
 .basket-body {
   position: absolute;
   z-index: auto;
-  left: 8%;
-  right: 8%;
-  top: 0;
-  height: 62%;
+  left: 10%;
+  right: 12%;
+  top: -6%;
+  height: 72%;
   background: none;
 }
 
 .feed-fruit {
   position: absolute;
-  width: 44%;
-  height: 128%;
+  width: 42%;
+  height: 108%;
   min-width: 0;
   border: 0;
   border-radius: 0;
@@ -598,37 +604,36 @@ button.primary:focus-visible {
   box-shadow: none;
   padding: 0;
   touch-action: none;
-}
-
-.basket.is-wide {
-  flex: 0 0 auto;
-  width: min(92%, 560px);
-  height: auto;
-  aspect-ratio: 600 / 294;
-  margin-inline: auto;
-}
-
-.basket.is-wide .basket-body {
-  left: 10%;
-  right: 10%;
-  top: 6%;
-  height: 48%;
-}
-
-.basket.is-wide .feed-fruit {
-  width: 13%;
-  height: 125%;
-  left: calc(var(--slot) * 7.3%);
-  bottom: calc(22% + var(--lift) * 10%);
   z-index: 2;
 }
 
-.basket.is-wide .feed-fruit[data-fruit="cherries"]:not(.is-dragging) {
-  z-index: 6;
-  width: 16%;
-  height: 100%;
-  bottom: -18%;
-  transform: none;
+.basket .feed-fruit:nth-child(1) {
+  left: 0%;
+  bottom: 18%;
+}
+
+.basket .feed-fruit:nth-child(2) {
+  left: 20%;
+  bottom: 30%;
+}
+
+.basket .feed-fruit:nth-child(3) {
+  left: 38%;
+  bottom: 14%;
+}
+
+.basket .feed-fruit:nth-child(4) {
+  left: 54%;
+  bottom: 26%;
+  width: 40%;
+}
+
+.basket .feed-fruit[data-fruit="cherries"] {
+  left: 26%;
+  bottom: 46%;
+  width: 48%;
+  height: 78%;
+  z-index: 4;
 }
 
 .feed-fruit.is-next {
@@ -804,13 +809,12 @@ html.is-filled #topbar {
 }
 
 @media (max-width: 900px) {
-  #feed {
-    padding-bottom: 76px;
+  #feed-fruits {
+    padding: 0 8px 74px;
   }
 
-  .basket.is-wide {
-    width: min(68vw, 300px);
-    max-height: none;
+  .basket {
+    max-width: none;
   }
 }
 
@@ -966,13 +970,11 @@ html.is-filled #topbar {
     padding: 2px 6px 4px;
   }
 
-  .basket.is-wide {
-    width: min(46vh, 240px);
+  #feed-fruits {
+    padding: 0 72px 10px 8px;
   }
-}
 
-@media (max-width: 900px) {
-  #feed {
-    padding-bottom: 76px;
+  .basket {
+    max-width: 200px;
   }
 }
