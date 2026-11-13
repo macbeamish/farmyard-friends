@@ -22,7 +22,12 @@
   </head>
   <body>
     <div id="app">
-      <div id="stage">
+    <div id="stage">
+      <div id="topbar">
+        <button id="skip" class="ghost side" type="button" hidden>
+          <span class="btn-en">Next round</span>
+          <span class="btn-ru" lang="ru">Следующий раунд</span>
+        </button>
         <div id="hud">
           <div class="caption-card">
             <p id="round-help"></p>
@@ -31,14 +36,15 @@
             <div id="progress" aria-hidden="true"></div>
           </div>
         </div>
-        <button id="skip" class="ghost side" type="button" hidden>
-          <span class="btn-en">Next round</span>
-          <span class="btn-ru" lang="ru">Следующий раунд</span>
+        <button id="full" class="ghost" type="button">
+          <span class="btn-en">Full</span>
+          <span class="btn-ru" lang="ru">Экран</span>
         </button>
         <button id="again" class="ghost" type="button" disabled>
           <span class="btn-en">Hear it again</span>
           <span class="btn-ru" lang="ru">Ещё раз</span>
         </button>
+      </div>
         <div id="memory" hidden>
           <div id="memory-board"></div>
         </div>
@@ -61,6 +67,10 @@
           <button id="play" class="primary" type="button" disabled>
             <span class="btn-en">Please wait</span>
             <span class="btn-ru" lang="ru">Подождите</span>
+          </button>
+          <button id="full-start" class="ghost stack" type="button">
+            <span class="btn-en">Full screen</span>
+            <span class="btn-ru" lang="ru">На весь экран</span>
           </button>
         </div>
       </div>

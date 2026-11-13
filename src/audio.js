@@ -5,6 +5,18 @@ let generation = 0
 let replayToken = 0
 let active = null
 let voicesReady = null
+let voice = null
+let chime = null
+let primed = false
+let chimeToken = 0
+let chimeUrl = ""
+let blockedSrc = ""
+let blockedText = ""
+
+const localUrl = new Map()
+const warming = new Set()
+const warmQueue = []
+let warmActive = 0
 
 function loadVoices() {
   if (voicesReady) return voicesReady
@@ -34,13 +46,13 @@ function pickBritishVoice(voices) {
 }
 
 function browserSpeak(text) {
-  if (!window.speechSynthesis) return Promise.resolve()
+  if (!window.speechSynthesis || !text) return Promise.resolve()
   return loadVoices().then(
     (voices) =>
       new Promise((resolve) => {
         const utterance = new SpeechSynthesisUtterance(text)
-        const voice = pickBritishVoice(voices)
-        if (voice) utterance.voice = voice
+        const picked = pickBritishVoice(voices)
+        if (picked) utterance.voice = picked
         utterance.lang = "en-GB"
         utterance.rate = 0.9
         utterance.pitch = 1.08
@@ -50,6 +62,139 @@ function browserSpeak(text) {
         window.speechSynthesis.speak(utterance)
       }),
   )
+}
+
+function mountAudio(id) {
+  const audio = document.createElement("audio")
+  audio.id = id
+  audio.playsInline = true
+  audio.setAttribute("playsinline", "")
+  audio.setAttribute("webkit-playsinline", "")
+  audio.preload = "auto"
+  audio.hidden = true
+  document.body.append(audio)
+  return audio
+}
+
+function silentUrl() {
+  return "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA="
+}
+
+function makeChimeUrl() {
+  const rate = 22050
+  const count = Math.floor(rate * 0.62)
+  const pcm = new Int16Array(count)
+  ;[784, 1046.5, 1318.5].forEach((freq, index) => {
+    const start = Math.floor(rate * index * 0.07)
+    for (let i = start; i < count; i += 1) {
+      const t = (i - start) / rate
+      const env = Math.exp(-3.8 * t) * (1 - Math.exp(-t * 90))
+      const mixed = pcm[i] / 32767 + Math.sin(2 * Math.PI * freq * t) * env * 0.55
+      pcm[i] = Math.max(-1, Math.min(1, mixed)) * 32767
+    }
+  })
+  const buffer = new ArrayBuffer(44 + pcm.length * 2)
+  const view = new DataView(buffer)
+  const write = (offset, text) => {
+    for (let i = 0; i < text.length; i += 1) view.setUint8(offset + i, text.charCodeAt(i))
+  }
+  write(0, "RIFF")
+  view.setUint32(4, 36 + pcm.length * 2, true)
+  write(8, "WAVE")
+  write(12, "fmt ")
+  view.setUint32(16, 16, true)
+  view.setUint16(20, 1, true)
+  view.setUint16(22, 1, true)
+  view.setUint32(24, rate, true)
+  view.setUint32(28, rate * 2, true)
+  view.setUint16(32, 2, true)
+  view.setUint16(34, 16, true)
+  write(36, "data")
+  view.setUint32(40, pcm.length * 2, true)
+  pcm.forEach((sample, index) => view.setInt16(44 + index * 2, sample, true))
+  return URL.createObjectURL(new Blob([buffer], { type: "audio/wav" }))
+}
+
+function ensureElements() {
+  if (voice) return
+  voice = mountAudio("voice")
+  chime = mountAudio("chime")
+  chimeUrl = makeChimeUrl()
+  chime.src = chimeUrl
+  chime.load()
+}
+
+function pumpWarm() {
+  while (warmActive < 4 && warmQueue.length) {
+    const src = warmQueue.shift()
+    warmActive += 1
+    fetch(src)
+      .then((res) => (res.ok ? res.blob() : Promise.reject(new Error("missing audio"))))
+      .then((blob) => {
+        const typed = blob.type ? blob : new Blob([blob], { type: "audio/mpeg" })
+        localUrl.set(src, URL.createObjectURL(typed))
+      })
+      .catch(() => {})
+      .finally(() => {
+        warmActive -= 1
+        pumpWarm()
+      })
+  }
+}
+
+export function warmClip(src) {
+  if (!src || warming.has(src)) return
+  warming.add(src)
+  warmQueue.push(src)
+  pumpWarm()
+}
+
+function clipSrc(src) {
+  return localUrl.get(src) || src
+}
+
+function useSrc(audio, src) {
+  const next =
+    src.startsWith("blob:") || src.startsWith("data:") ? src : new URL(src, window.location.href).href
+  if (audio.src !== next) audio.src = next
+}
+
+export function unlockAudio() {
+  ensureElements()
+  if (!primed) {
+    primed = true
+    const token = chimeToken
+    voice.src = silentUrl()
+    const primedSrc = voice.src
+    voice.play().catch(() => {
+      if (voice.src === primedSrc) primed = false
+    })
+    chime.volume = 0
+    chime.play()
+      .then(() => {
+        if (token !== chimeToken) return
+        chime.pause()
+        try {
+          chime.currentTime = 0
+        } catch {
+          /* the clip may not be seekable yet */
+        }
+        chime.volume = 1
+      })
+      .catch(() => {
+        chime.volume = 1
+      })
+    return
+  }
+  if (!blockedSrc || !voice.paused) return
+  const src = blockedSrc
+  const text = blockedText
+  blockedSrc = ""
+  blockedText = ""
+  voice.src = src
+  voice.play().catch(() => {
+    browserSpeak(text)
+  })
 }
 
 function haltAudio() {
@@ -68,6 +213,8 @@ export function stopSpeaking() {
   generation += 1
   replayToken += 1
   active = null
+  blockedSrc = ""
+  blockedText = ""
   cancelPause()
   cancelPause = () => {}
   haltAudio()
@@ -86,6 +233,7 @@ export function hearAgain() {
 }
 
 function playOne(line, mine) {
+  ensureElements()
   haltAudio()
   return new Promise((resolve) => {
     let settled = false
@@ -95,14 +243,23 @@ function playOne(line, mine) {
       resolve(completed && mine === generation)
     }
     finishCurrent = () => finish(false)
-
-    const audio = new Audio(line.src)
-    current = audio
-    audio.onended = () => finish(true)
-    audio.onerror = () => {
+    const src = clipSrc(line.src)
+    current = voice
+    voice.onended = () => finish(true)
+    voice.onerror = () => {
       browserSpeak(line.text).then(() => finish(true))
     }
-    audio.play().catch(() => {
+    useSrc(voice, src)
+    try {
+      voice.currentTime = 0
+    } catch {
+      /* a fresh clip may not be seekable until it starts */
+    }
+    const pending = voice.play()
+    if (!pending) return
+    pending.catch(() => {
+      blockedSrc = src
+      blockedText = line.text
       browserSpeak(line.text).then(() => finish(true))
     })
   })
@@ -163,35 +320,19 @@ export function preloadVoices() {
   return loadVoices()
 }
 
-let chimeContext = null
-
 export function playChime() {
-  const AudioContext = window.AudioContext || window.webkitAudioContext
-  if (!AudioContext) return Promise.resolve()
-  if (!chimeContext) chimeContext = new AudioContext()
-  const ctx = chimeContext
-  const start = () => {
-    const now = ctx.currentTime
-    ;[784, 1046.5, 1318.5].forEach((freq, index) => {
-      const osc = ctx.createOscillator()
-      const gain = ctx.createGain()
-      const when = now + index * 0.07
-      osc.type = "sine"
-      osc.frequency.value = freq
-      gain.gain.setValueAtTime(0.0001, when)
-      gain.gain.exponentialRampToValueAtTime(0.2, when + 0.02)
-      gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.55)
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-      osc.start(when)
-      osc.stop(when + 0.56)
-    })
+  ensureElements()
+  chimeToken += 1
+  chime.volume = 1
+  useSrc(chime, chimeUrl)
+  try {
+    chime.currentTime = 0
+  } catch {
+    /* replay from the start once the clip can seek */
   }
-  const ready = ctx.state === "suspended" ? ctx.resume() : Promise.resolve()
-  return ready.then(() => {
-    start()
-    return new Promise((resolve) => {
-      window.setTimeout(resolve, 700)
-    })
+  const pending = chime.play()
+  pending?.catch(() => {})
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, 700)
   })
 }

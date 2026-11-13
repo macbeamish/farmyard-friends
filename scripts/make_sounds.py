@@ -25,6 +25,10 @@ SOURCES = {
     "chicken": "https://upload.wikimedia.org/wikipedia/commons/4/44/Hen_announcing_shes_lain_an_egg.ogg",
     "turkey": "https://upload.wikimedia.org/wikipedia/commons/1/11/Gobbler.ogg",
     "bunny": "https://upload.wikimedia.org/wikipedia/commons/4/49/Rabbit_oinks_and_squeaks.wav",
+    "mouse": "https://commons.wikimedia.org/wiki/Special:FilePath/Ultrasonic-Songs-of-Male-Mice-pbio.0030386.sa003.ogg",
+    "goat": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Herd_of_goats_bleating.ogg",
+    "rooster": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Rooster_crowing.ogg",
+    "goose": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Geese_Honking_%28loud%29.ogg",
 }
 
 # One clear call, taken from the loudest burst in each recording.
@@ -37,6 +41,10 @@ SLICES = {
     "chicken": (4.35, 5.55),
     "turkey": (0.02, 0.98),
     "bunny": (11.80, 12.12),
+    "mouse": (0.0, 1.55),
+    "goat": (4.35, 5.20),
+    "rooster": (0.85, 2.65),
+    "goose": (4.40, 5.15),
 }
 
 

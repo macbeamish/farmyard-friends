@@ -205,9 +205,18 @@ export async function createFarm(stage) {
     const width = stage.clientWidth || 1
     const height = stage.clientHeight || 1
     renderer.setSize(width, height, false)
-    const scale = Math.min(width / WORLD_W, height / WORLD_H)
-    const camW = width / scale
-    const camH = height / scale
+    const viewAspect = width / height
+    const safeW = 15.6
+    const safeH = 7.8
+    let camH = safeW / viewAspect
+    let camW = safeW
+    if (camH < safeH) {
+      camH = safeH
+      camW = safeH * viewAspect
+    }
+    const cover = Math.max(camW / WORLD_W, camH / WORLD_H, 1)
+    const picture = cover > 1.35 ? 1 : cover
+    backdrop.scale.set(picture, picture, 1)
     camera.left = -camW / 2
     camera.right = camW / 2
     camera.top = camH / 2
@@ -310,6 +319,8 @@ export async function createFarm(stage) {
     return actors.find((actor) => actor.id === id)
   }
 
+  const BIG = 1.34
+
   function sizeAnimal(actor, scale) {
     actor.mesh.scale.set(scale, scale, 1)
     actor.shadow.scale.set(scale, scale, 1)
@@ -317,13 +328,41 @@ export async function createFarm(stage) {
     actor.lift = (height * (scale - 1)) / 2
   }
 
+  function parkMonster(actor) {
+    actor.monster.visible = false
+    actor.monster.material.opacity = 1
+    actor.monster.position.copy(actor.monsterHome)
+    actor.monster.rotation.z = 0
+    actor.leaveUntil = 0
+  }
+
   return {
     onPick(handler) {
       pickHandler = handler
     },
+    showBigAnimals() {
+      for (const actor of actors) {
+        sizeAnimal(actor, BIG)
+        actor.mesh.visible = true
+        actor.shadow.visible = true
+        parkMonster(actor)
+        actor.hopUntil = 0
+        actor.shakeUntil = 0
+      }
+    },
+    hideAnimals() {
+      for (const actor of actors) {
+        actor.mesh.visible = false
+        actor.shadow.visible = false
+        parkMonster(actor)
+      }
+      heart.visible = false
+    },
     showMonsters() {
       for (const actor of actors) {
-        sizeAnimal(actor, 1.34)
+        sizeAnimal(actor, BIG)
+        actor.mesh.visible = true
+        actor.shadow.visible = true
         actor.monster.visible = true
         actor.monster.material.opacity = 1
         actor.monster.position.copy(actor.monsterHome)
@@ -334,11 +373,9 @@ export async function createFarm(stage) {
     resetVisuals() {
       for (const actor of actors) {
         sizeAnimal(actor, 1)
-        actor.monster.visible = false
-        actor.monster.material.opacity = 1
-        actor.monster.position.copy(actor.monsterHome)
-        actor.monster.rotation.z = 0
-        actor.leaveUntil = 0
+        actor.mesh.visible = true
+        actor.shadow.visible = true
+        parkMonster(actor)
         actor.hopUntil = 0
         actor.shakeUntil = 0
       }
@@ -376,7 +413,8 @@ export async function createFarm(stage) {
       actor.hopUntil = t + 0.45
       heart.visible = true
       heart.material.opacity = 1
-      heart.position.set(actor.mesh.position.x, actor.homeY + actor.mesh.geometry.parameters.height * 0.35, 0.8)
+      const height = actor.mesh.geometry.parameters.height * actor.mesh.scale.y
+      heart.position.set(actor.mesh.position.x, actor.mesh.position.y + height * 0.22, 0.8)
       heart.userData.baseY = heart.position.y
       heartUntil = t + 0.9
     },

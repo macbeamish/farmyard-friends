@@ -20,6 +20,10 @@ ANIMALS = [
     "chicken",
     "turkey",
     "sheep",
+    "mouse",
+    "goat",
+    "rooster",
+    "goose",
 ]
 
 CHEERS = {
@@ -50,7 +54,6 @@ for name in ANIMALS:
     LINES[f"name-{name}"] = f"{spoken}."
     LINES[f"ask-{name}"] = f"{spoken}?"
     LINES[f"save-{name}"] = f"Save the {word}."
-
 
 async def render(
     name: str,

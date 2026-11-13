@@ -20,17 +20,23 @@ export const LAYOUT = [
   { id: "duck", x: -5.45, feet: -3.05, height: 1.38 },
   { id: "chicken", x: -2.25, feet: -3.2, height: 1.42 },
   { id: "pig", x: 1.05, feet: -2.85, height: 1.48 },
+  { id: "goose", x: -6.85, feet: -3.45, height: 1.12 },
+  { id: "mouse", x: 2.85, feet: -3.55, height: 0.82 },
+  { id: "rooster", x: 6.35, feet: -1.75, height: 1.18 },
+  { id: "goat", x: 4.45, feet: -0.15, height: 1.48 },
 ]
 
 export const EXTRA_ANIMALS = [
-  { id: "mouse", name: "mouse" },
-  { id: "goat", name: "goat" },
-  { id: "rooster", name: "rooster" },
-  { id: "goose", name: "goose" },
+  { id: "mouse", name: "mouse", sound: "squeak" },
+  { id: "goat", name: "goat", sound: "maa" },
+  { id: "rooster", name: "rooster", sound: "cock-a-doodle-doo" },
+  { id: "goose", name: "goose", sound: "honk" },
 ]
 
-export const FEED_ANIMALS = [...ANIMALS, ...EXTRA_ANIMALS]
-export const MEMORY_ANIMALS = [...ANIMALS, ...EXTRA_ANIMALS]
+export const FARM_ANIMALS = [...ANIMALS, ...EXTRA_ANIMALS]
+
+export const FEED_ANIMALS = FARM_ANIMALS
+export const MEMORY_ANIMALS = FARM_ANIMALS
 
 export const WINDMILL = {
   x: -5.85,

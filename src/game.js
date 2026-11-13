@@ -1,4 +1,4 @@
-import { ANIMALS, FEED_ANIMALS, MEMORY_ANIMALS } from "./animals.js"
+import { FARM_ANIMALS, FEED_ANIMALS, MEMORY_ANIMALS } from "./animals.js"
 import { hearAgain, playChime, speakLine, stopSpeaking } from "./audio.js"
 import { FRUITS } from "./fruits.js"
 import { promptFor } from "./lines.js"
@@ -83,6 +83,9 @@ export function createGame(farm, ui) {
     ui.setRound(ROUNDS[round])
     ui.memory.hide()
     ui.feed.hide()
+    if (round === 1 || round === 2 || round === 5) farm.hideAnimals()
+    else if (round === LAST_ROUND) farm.showMonsters()
+    else farm.showBigAnimals()
     if (round === 1) {
       await runMemory(my, FRUITS)
       return
@@ -95,7 +98,7 @@ export function createGame(farm, ui) {
       await runMemory(my, MEMORY_ANIMALS)
       return
     }
-    queue = shuffle(ANIMALS)
+    queue = shuffle(FARM_ANIMALS)
     index = 0
     ui.setProgress(0, queue.length)
     if (round === LAST_ROUND) farm.showMonsters()

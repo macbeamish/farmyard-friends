@@ -1,4 +1,5 @@
 import { FEED_ANIMALS } from "./animals.js"
+import { playChime } from "./audio.js"
 import { FRUITS } from "./fruits.js"
 import { eatLine } from "./lines.js"
 
@@ -129,6 +130,7 @@ export function createFeed(root) {
       piece.remove()
       index += 1
       handlers.onProgress(index)
+      playChime()
       if (index >= queue.length) {
         await wait(900)
         if (!handlers || !handlers.isCurrent()) return

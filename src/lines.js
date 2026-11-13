@@ -1,9 +1,12 @@
-import { ANIMALS } from "./animals.js"
+import { FARM_ANIMALS } from "./animals.js"
 
 const base = import.meta.env.BASE_URL
 
+const REAL_CALLS = new Set(["says-mouse", "says-goat", "says-rooster", "says-goose"])
+
 export function clip(name, text) {
-  return { src: `${base}audio/${name}.mp3`, text }
+  const version = REAL_CALLS.has(name) ? "?v=2" : ""
+  return { src: `${base}audio/${name}.mp3${version}`, text }
 }
 
 function title(word) {
@@ -25,7 +28,7 @@ export const AWESOME = single("praise-awesome", "Awesome!")
 export const FRUIT_PRAISE = [YAY, HOORAY, GREAT_JOB, AWESOME]
 export const PRAISE = [WELL_DONE, GOOD_JOB, PRAISE_YES, PRAISE_GREAT]
 
-const byId = Object.fromEntries(ANIMALS.map((animal) => [animal.id, animal]))
+const byId = Object.fromEntries(FARM_ANIMALS.map((animal) => [animal.id, animal]))
 
 export function animalById(id) {
   return byId[id]

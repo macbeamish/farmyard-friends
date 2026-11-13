@@ -11,7 +11,7 @@ Each round shows one instruction in English and Russian, and the narrator asks t
 1. **Fruit Memory — Мемо: фрукты.** One card shows the fruit. The other shows its written name, and the narrator says that name. A correct pair plays a chime, and stars appear over the two cards.
 2. **Feed the Animals — Покорми животных.** “The goat is eating cherries.” The fruit sits in three baskets. Drag the right fruit onto the animal. Every animal is fed, every fruit is used, and the pairs change each game. A fed animal stays happy, with hearts and stars. The bunny is called a rabbit.
 3. **Animal Sounds — Звуки животных.** “Which animal says” and then the animal's own call, straight away. For the rabbit, the narrator asks “Which animal goes hop hop?”
-4. **Find the Animals — Найди животных.** “Where is the … sheep?” A correct choice is answered with “Yes. It's a sheep.”
+4. **Find the Animals — Найди животных.** “Where is the … sheep?” Mouse, goat, rooster, and goose are on the farm too. A correct choice is answered with “Yes. It's a sheep.”
 5. **Memory Game — Игра на память.** One card shows the animal. The other shows its written name, and the narrator says that name. Mouse, goat, rooster, and goose are included. A correct pair plays a chime, and stars appear over the two cards.
 6. **Save the Animals — Спаси животных.** “Save the sheep.” The animals are larger. A correct choice plays a chime, and stars appear over that animal. That monster waves and floats home.
 
@@ -37,7 +37,7 @@ Publish directory: `dist`
 
 ## Animals
 
-Cow (moo), pig (oink), duck (quack), horse (neigh), rabbit (hop hop), chicken (cluck), turkey (gobble), sheep (baa). The feeding round also has a mouse, a goat, a rooster, and a goose.
+Cow (moo), pig (oink), duck (quack), horse (neigh), rabbit (hop hop), chicken (cluck), turkey (gobble), sheep (baa), mouse (squeak), goat (maa), rooster (crow), and goose (honk).
 
 Fruits: apple, banana, orange, grapes, strawberry, pear, kiwi, watermelon, pineapple, lemon, mango, cherries.
 
@@ -50,3 +50,7 @@ The animal sounds round plays a short real animal call. The rabbit question is s
 - Sheep: “Sheep bleating” by earthcalling, public domain, Wikimedia Commons.
 - Chicken: “Hen announcing she's lain an egg” by alys, public domain, Wikimedia Commons.
 - Turkey: “Gobbler” by bod, public domain, Wikimedia Commons.
+- Mouse: “Ultrasonic Songs of Male Mice”, Audio S3, by Timothy E. Holy and Zhongsheng Guo, [CC BY 2.5](https://creativecommons.org/licenses/by/2.5/), pitch-shifted in the original recording, Wikimedia Commons.
+- Goat: “Herd of goats bleating” by stephan, public domain, Wikimedia Commons.
+- Rooster: “Rooster crowing” by Filo gèn', [CC BY-SA](https://commons.wikimedia.org/wiki/File:Rooster_crowing.ogg), Wikimedia Commons.
+- Goose: “Geese Honking (loud)” by the U.S. Fish and Wildlife Service, public domain, Wikimedia Commons.
