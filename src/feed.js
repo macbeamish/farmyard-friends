@@ -172,32 +172,19 @@ export function createFeed(root) {
       card.append(image, name)
       animals.append(card)
     }
-    for (let start = 0; start < list.length; start += 4) {
-      const basket = document.createElement("div")
-      basket.className = "basket"
-      const body = document.createElement("div")
-      body.className = "basket-body"
-      for (const fruit of list.slice(start, start + 4)) {
-        const card = document.createElement("button")
-        card.type = "button"
-        card.className = "feed-fruit"
-        card.dataset.fruit = fruit.id
-        card.setAttribute("aria-label", fruit.name)
-        const image = document.createElement("img")
-        image.src = `${base}art/${fruit.id}.png`
-        image.alt = ""
-        image.draggable = false
-        card.append(image)
-        card.addEventListener("pointerdown", (event) => onDown(event, card))
-        body.append(card)
-      }
-      const art = document.createElement("img")
-      art.className = "basket-art"
-      art.src = `${base}art/basket-bowl.png?v=1`
-      art.alt = ""
-      art.draggable = false
-      basket.append(body, art)
-      fruits.append(basket)
+    for (const fruit of list) {
+      const card = document.createElement("button")
+      card.type = "button"
+      card.className = "feed-fruit"
+      card.dataset.fruit = fruit.id
+      card.setAttribute("aria-label", fruit.name)
+      const image = document.createElement("img")
+      image.src = `${base}art/${fruit.id}.png`
+      image.alt = ""
+      image.draggable = false
+      card.append(image)
+      card.addEventListener("pointerdown", (event) => onDown(event, card))
+      fruits.append(card)
     }
     const turn = queue[index]
     if (!turn) return
