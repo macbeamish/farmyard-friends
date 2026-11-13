@@ -24,9 +24,17 @@
     <div id="app">
     <div id="stage">
       <div id="topbar">
-        <button id="skip" class="ghost side" type="button" hidden>
-          <span class="btn-en">Next round</span>
-          <span class="btn-ru" lang="ru">Следующий раунд</span>
+        <button id="again" class="ghost icon" type="button" disabled aria-label="Hear it again. Ещё раз">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z" />
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              d="M16.5 8.5a4.5 4.5 0 0 1 0 7"
+            />
+          </svg>
         </button>
         <div id="hud">
           <div class="caption-card">
@@ -40,9 +48,11 @@
           <span class="btn-en">Full</span>
           <span class="btn-ru" lang="ru">Экран</span>
         </button>
-        <button id="again" class="ghost" type="button" disabled>
-          <span class="btn-en">Hear it again</span>
-          <span class="btn-ru" lang="ru">Ещё раз</span>
+        <button id="skip" class="ghost icon side" type="button" hidden aria-label="Next round. Следующий раунд">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M5 5v14l9-7-9-7z" />
+            <path fill="currentColor" d="M16 5h3v14h-3z" />
+          </svg>
         </button>
       </div>
         <div id="memory" hidden>

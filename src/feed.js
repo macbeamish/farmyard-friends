@@ -75,7 +75,10 @@ export function createFeed(root) {
     piece.style.top = `${home.top}px`
     window.setTimeout(() => {
       piece.classList.remove("is-dragging")
-      piece.style.cssText = ""
+      piece.style.left = ""
+      piece.style.top = ""
+      piece.style.width = ""
+      piece.style.height = ""
     }, 180)
   }
 
@@ -97,7 +100,11 @@ export function createFeed(root) {
     piece.style.width = `${home.width}px`
     piece.style.height = `${home.height}px`
     place(piece, event)
-    piece.setPointerCapture(event.pointerId)
+    try {
+      piece.setPointerCapture(event.pointerId)
+    } catch {
+      // A cancelled pointer can reject capture; the move listeners still return the fruit.
+    }
     drag = { piece, home, id: piece.dataset.fruit }
 
     function move(next) {
@@ -187,7 +194,7 @@ export function createFeed(root) {
     })
     const art = document.createElement("img")
     art.className = "basket-art"
-    art.src = `${base}art/basket.png?v=3`
+    art.src = `${base}art/basket-bowl.png?v=1`
     art.alt = ""
     art.draggable = false
     basket.append(body, art)

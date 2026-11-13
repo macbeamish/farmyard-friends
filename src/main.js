@@ -108,37 +108,6 @@ function fullscreenActive() {
   )
 }
 
-function canRequestFull(el) {
-  return Boolean(el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen)
-}
-
-function requestFull(el) {
-  if (typeof el.requestFullscreen === "function") {
-    try {
-      return Promise.resolve(el.requestFullscreen({ navigationUI: "hide" }))
-    } catch {
-      return Promise.resolve(el.requestFullscreen())
-    }
-  }
-  const legacy = el.webkitRequestFullscreen || el.mozRequestFullScreen
-  if (typeof legacy !== "function") return Promise.reject(new Error("unavailable"))
-  try {
-    const result = legacy.call(el)
-    return result && typeof result.then === "function" ? result : Promise.resolve()
-  } catch (error) {
-    return Promise.reject(error)
-  }
-}
-
-function within(promise, ms) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => {
-      window.setTimeout(() => reject(new Error("timeout")), ms)
-    }),
-  ])
-}
-
 function tuckBrowserBars() {
   const html = document.documentElement
   const body = document.body
@@ -169,8 +138,44 @@ function labelFull(on) {
   fullStart.setAttribute("aria-label", full.getAttribute("aria-label"))
 }
 
+async function enterFullscreen(target) {
+  if (typeof target.requestFullscreen === "function") {
+    try {
+      await target.requestFullscreen({ navigationUI: "hide" })
+    } catch (error) {
+      if (!error || error.name === "TypeError") {
+        await target.requestFullscreen()
+        return
+      }
+      throw error
+    }
+    return
+  }
+  if (typeof target.webkitRequestFullscreen === "function") {
+    target.webkitRequestFullscreen()
+    return
+  }
+  throw new Error("unavailable")
+}
+
+function waitUntilFullscreen(ms = 700) {
+  if (fullscreenActive()) return Promise.resolve(true)
+  return new Promise((resolve) => {
+    const finish = () => {
+      window.clearTimeout(timer)
+      document.removeEventListener("fullscreenchange", finish)
+      document.removeEventListener("webkitfullscreenchange", finish)
+      resolve(fullscreenActive())
+    }
+    const timer = window.setTimeout(finish, ms)
+    document.addEventListener("fullscreenchange", finish)
+    document.addEventListener("webkitfullscreenchange", finish)
+  })
+}
+
 async function toggleFull() {
   const root = document.documentElement
+  const target = root
   if (fullscreenActive() || root.classList.contains("is-filled")) {
     const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen
     if (fullscreenActive() && exit) {
@@ -185,23 +190,19 @@ async function toggleFull() {
     fitViewport()
     return
   }
-  if (document.fullscreenEnabled !== false && canRequestFull(root)) {
-    try {
-      await within(requestFull(root), 700)
-    } catch {
-      /* iPhone and in-app browsers refuse the Fullscreen API */
-    }
-    if (fullscreenActive()) {
-      root.classList.remove("is-filled")
-      labelFull(true)
-      fitViewport()
-      return
-    }
+  try {
+    await enterFullscreen(target)
+    const on = fullscreenActive() || (await waitUntilFullscreen())
+    if (!on) throw new Error("unchanged")
+    root.classList.remove("is-filled")
+    labelFull(true)
+    fitViewport()
+  } catch {
+    root.classList.add("is-filled")
+    labelFull(true)
+    if (window.matchMedia("(pointer: coarse)").matches) tuckBrowserBars()
+    fitViewport()
   }
-  root.classList.add("is-filled")
-  labelFull(true)
-  tuckBrowserBars()
-  fitViewport()
 }
 
 full.setAttribute("aria-label", "Full screen. На весь экран")

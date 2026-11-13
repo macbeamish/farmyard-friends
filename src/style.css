@@ -56,11 +56,29 @@ button,
 #topbar {
   position: relative;
   z-index: 4;
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-areas: "again hud full skip";
+  align-items: start;
   gap: 6px;
   padding: max(4px, env(safe-area-inset-top)) 6px 0;
   pointer-events: none;
+}
+
+#again {
+  grid-area: again;
+}
+
+#hud {
+  grid-area: hud;
+}
+
+#full {
+  grid-area: full;
+}
+
+#skip {
+  grid-area: skip;
 }
 
 #hud {
@@ -160,6 +178,18 @@ button.ghost {
   border-radius: 999px;
   padding: 6px 12px;
   box-shadow: 0 6px 16px rgba(61, 41, 20, 0.12);
+}
+
+button.icon {
+  width: 46px;
+  height: 46px;
+  padding: 0;
+}
+
+button.icon svg {
+  width: 26px;
+  height: 26px;
+  display: block;
 }
 
 button.stack {
@@ -519,10 +549,11 @@ button.primary:focus-visible {
 #feed-fruits {
   display: flex;
   gap: 8px;
-  height: 28%;
-  min-height: 96px;
+  height: auto;
+  min-height: 0;
   align-items: flex-end;
-  padding: 0 4px;
+  justify-content: center;
+  padding: 0 4px 8px;
   overflow: visible;
 }
 
@@ -541,18 +572,18 @@ button.primary:focus-visible {
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 108%;
-  object-fit: fill;
+  height: 100%;
+  object-fit: contain;
   pointer-events: none;
 }
 
 .basket-body {
   position: absolute;
-  z-index: 1;
-  left: 9%;
-  right: 9%;
+  z-index: auto;
+  left: 8%;
+  right: 8%;
   top: 0;
-  height: 68%;
+  height: 62%;
   background: none;
 }
 
@@ -570,29 +601,33 @@ button.primary:focus-visible {
 }
 
 .basket.is-wide {
-  flex: 1 1 auto;
-  width: min(100%, 1080px);
-  max-width: 100%;
+  flex: 0 0 auto;
+  width: min(92%, 560px);
+  height: auto;
+  aspect-ratio: 600 / 294;
+  margin-inline: auto;
 }
 
 .basket.is-wide .basket-body {
-  left: 5%;
-  right: 5%;
+  left: 10%;
+  right: 10%;
+  top: 6%;
+  height: 48%;
 }
 
 .basket.is-wide .feed-fruit {
-  width: 11.5%;
-  height: 158%;
-  left: calc(var(--slot) * 7.55%);
-  bottom: calc(-50% + var(--lift) * 16%);
-  z-index: calc(var(--lift) * 4 + 1);
+  width: 13%;
+  height: 125%;
+  left: calc(var(--slot) * 7.3%);
+  bottom: calc(22% + var(--lift) * 10%);
+  z-index: 2;
 }
 
 .basket.is-wide .feed-fruit[data-fruit="cherries"]:not(.is-dragging) {
-  z-index: 5;
-  width: 12%;
-  height: 96%;
-  bottom: -36%;
+  z-index: 6;
+  width: 16%;
+  height: 100%;
+  bottom: -18%;
   transform: none;
 }
 
@@ -770,34 +805,41 @@ html.is-filled #topbar {
 
 @media (max-width: 900px) {
   #feed {
-    padding-bottom: 72px;
+    padding-bottom: 76px;
+  }
+
+  .basket.is-wide {
+    width: min(68vw, 300px);
+    max-height: none;
   }
 }
 
 @media (orientation: portrait) {
   #topbar {
-    flex-wrap: wrap;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "hud hud hud"
+      "again full skip";
     align-items: center;
     gap: 4px;
   }
 
-  #hud {
-    flex: 1 1 100%;
-    order: -1;
-  }
-
-  #skip,
-  #full,
-  #again {
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  button.ghost {
-    width: 100%;
-    padding: 3px 4px;
+  button.ghost:not(.icon) {
+    width: auto;
+    justify-self: center;
+    padding: 3px 8px;
     font-size: 0.64rem;
     line-height: 1.05;
+  }
+
+  button.icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  button.icon svg {
+    width: 22px;
+    height: 22px;
   }
 
   .caption-card {
@@ -924,7 +966,13 @@ html.is-filled #topbar {
     padding: 2px 6px 4px;
   }
 
-  #feed-fruits {
-    min-height: 72px;
+  .basket.is-wide {
+    width: min(46vh, 240px);
+  }
+}
+
+@media (max-width: 900px) {
+  #feed {
+    padding-bottom: 76px;
   }
 }
